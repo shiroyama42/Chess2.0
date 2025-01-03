@@ -32,34 +32,33 @@ public class GameState implements InputProcessor {
         IntRect rect = board.getRectangle(new TargetPoint(0, 0));
         int nextPow2 = Integer.highestOneBit(rect.getHeight() - 1) << 1;
         Pixmap pixmap = new Pixmap(nextPow2, nextPow2, Pixmap.Format.RGBA8888);
-        int borderWidth=rect.getWidth()/10+1;
+        int borderWidth = rect.getWidth() / 10 + 1;
         pixmap.setColor(Color.WHITE);
         for (int i = 0; i < borderWidth; i++) {
             pixmap.drawRectangle(rect.getX() + i, rect.getY() + i,
                 rect.getWidth() - 2 * i, rect.getHeight() - 2 * i);
         }
-        overlayBoxTexture=new Texture(pixmap);
+        overlayBoxTexture = new Texture(pixmap);
         pixmap.dispose();
-        overlayBoxSprite=new Sprite(overlayBoxTexture,rect.getWidth(),rect.getHeight());
+        overlayBoxSprite = new Sprite(overlayBoxTexture, rect.getWidth(), rect.getHeight());
 
         this.board = board;
     }
 
-    public void draw(SpriteBatch batch){
-        if(selected!=null)
-        {
+    public void draw(SpriteBatch batch) {
+        if (selected != null) {
             IntRect tile = board.getRectangle(selected);
             overlayBoxSprite.setPosition(tile.getX(), tile.getY());
-            overlayBoxSprite.setColor(Color.GREEN);
+            overlayBoxSprite.setColor(Color.GREEN);  // Green for selected piece
             overlayBoxSprite.draw(batch);
         }
 
-
-        for(TargetPoint moveTile:validMoves)
-        {
+        for (TargetPoint moveTile : validMoves) {
             IntRect tile = board.getRectangle(moveTile);
             overlayBoxSprite.setPosition(tile.getX(), tile.getY());
-            Color color=(board.getPiece(moveTile)==null)?Color.YELLOW:Color.RED;
+
+            // Yellow for valid move, Red for capturing move
+            Color color = (board.getPiece(moveTile) == null) ? Color.YELLOW : Color.RED;
             overlayBoxSprite.setColor(color);
             overlayBoxSprite.draw(batch);
         }
@@ -82,41 +81,36 @@ public class GameState implements InputProcessor {
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
+        if (button != 0) {
+            return false;
+        }
+
         TargetPoint tileIdx = board.getPoint(x, y);
 
         boolean moved = false;
+
+        // Check if the click is on a valid move square
         for (TargetPoint move : validMoves) {
             if (tileIdx.equals(move)) {
-
                 board.movePiece(selected, tileIdx);
-
-                currentTurn = (currentTurn == Team.WHITE) ? Team.BLACK
-                    : Team.WHITE;
+                currentTurn = (currentTurn == Team.WHITE) ? Team.BLACK : Team.WHITE;
                 moved = true;
-
             }
-
         }
 
         validMoves.clear();
-        selected=null;
+        selected = null;
 
+        // If no piece was moved, check if a new piece can be selected
         if (!moved) {
-
             PieceInfo piece = board.getPiece(tileIdx);
-
-            if (piece != null) {
-
-                if (piece.team == currentTurn) {
-
-                    selected=tileIdx;
-
-                    Rules.GetValidMoves(validMoves, tileIdx, piece, board);
-                }
+            if (piece != null && piece.team == currentTurn) {
+                selected = tileIdx;
+                Rules.GetValidMoves(validMoves, tileIdx, piece, board);
             }
         }
 
-        return false;
+        return true;  // Return true to handle input
     }
 
     @Override

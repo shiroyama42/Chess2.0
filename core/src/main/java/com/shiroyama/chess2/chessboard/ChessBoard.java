@@ -90,15 +90,15 @@ public class ChessBoard {
         pixmap.dispose();
     }
 
-    public void draw(SpriteBatch batch){
-        if(boardTexture == null){
+    public void draw(SpriteBatch batch) {
+        if (boardTexture == null) {
             generateTexture();
         }
         batch.draw(boardTexture, 0, 0);
-        for (int col = 0; col < 8; col++){
-            for (int row = 0; row < 8; row++){
+        for (int col = 0; col < 8; col++) {
+            for (int row = 0; row < 8; row++) {
                 PieceInfo piece = pieces[col][row];
-                if (piece != null){
+                if (piece != null) {
                     String pieceName = piece.getName();
                     Texture texture = textures.get(pieceName);
                     batch.draw(texture, col * squareSize, row * squareSize, squareSize, squareSize);
@@ -106,6 +106,7 @@ public class ChessBoard {
             }
         }
     }
+
 
     public TargetPoint getKing(Team team){
         return (team == Team.WHITE) ? whiteKing : blackKing;

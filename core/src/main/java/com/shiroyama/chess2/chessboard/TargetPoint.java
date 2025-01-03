@@ -13,11 +13,12 @@ public class TargetPoint {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        TargetPoint that = (TargetPoint) o;
-        return x == that.x && y == that.y;
+    public boolean equals(Object obj) {
+        if(!(obj instanceof TargetPoint)){
+            return false;
+        }
+        TargetPoint other = (TargetPoint) obj;
+        return other.getX() == x && other.getY() == y;
     }
 
     public int getX() {

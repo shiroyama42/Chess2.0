@@ -5,14 +5,12 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.shiroyama.chess2.chessboard.ChessBoard;
 import com.shiroyama.chess2.chessboard.GameState;
 import com.shiroyama.chess2.chessboard.TextureLoader;
 
 import java.util.HashMap;
 
-/** First screen of the application. Displayed after the application is created. */
 public class GameScreen implements Screen {
 
     private SpriteBatch batch;
