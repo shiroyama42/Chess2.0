@@ -68,7 +68,7 @@ public class Rules {
 
     private static void getValidMovesBishop(ArrayList<TargetPoint> list, TargetPoint selection, Team team, ChessBoard board){
         for (int xDir = -1; xDir <= 1; xDir += 2){
-            for (int yDir = -1; yDir <= 1; xDir += 2){
+            for (int yDir = -1; yDir <= 1; yDir += 2){
                 TargetPoint move = selection;
                 while (true){
                     move = move.Transpose(xDir, yDir);
