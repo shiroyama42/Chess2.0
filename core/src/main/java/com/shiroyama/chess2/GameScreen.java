@@ -3,7 +3,7 @@ package com.shiroyama.chess2;
 import com.badlogic.gdx.Screen;
 
 /** First screen of the application. Displayed after the application is created. */
-public class FirstScreen implements Screen {
+public class GameScreen implements Screen {
     @Override
     public void show() {
         // Prepare your screen here.
