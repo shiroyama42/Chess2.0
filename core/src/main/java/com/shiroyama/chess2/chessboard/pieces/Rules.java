@@ -11,11 +11,11 @@ public class Rules {
 
     public Rules() {}
 
-    public static void GetValidMoves(ArrayList<TargetPoint> list, TargetPoint selection, PieceInfo piece, ChessBoard board){
+    /*public static void GetValidMoves(ArrayList<TargetPoint> list, TargetPoint selection, PieceInfo piece, ChessBoard board){
         GetValidMoves(list, selection, piece, board, true);
-    }
+    }*/
 
-    public static void GetValidMoves(ArrayList<TargetPoint> list, TargetPoint selection, PieceInfo piece, ChessBoard board, boolean checkCheck){
+    public static void GetValidMoves(ArrayList<TargetPoint> list, TargetPoint selection, PieceInfo piece, ChessBoard board){
         switch (piece.pieceType){
             case PAWN:
                 getValidMovesPawn(list, selection, piece.team, board);
@@ -36,9 +36,9 @@ public class Rules {
                 getValidMovesKing(list, selection, piece.team, board);
                 break;
         }
-        if (checkCheck){
+        /*if (checkCheck){
             checkCheck(list, selection, piece.team, board);
-        }
+        }*/
 
     }
 
@@ -184,7 +184,7 @@ public class Rules {
         }
     }
 
-    private static void checkCheck(ArrayList<TargetPoint> list, TargetPoint selection, Team team, ChessBoard board){
+    /*private static void checkCheck(ArrayList<TargetPoint> list, TargetPoint selection, Team team, ChessBoard board){
         for (int i = 0; i < list.size(); i++){
             TargetPoint move = list.get(i);
 
@@ -196,9 +196,9 @@ public class Rules {
 
             board.undoMove();
         }
-    }
+    }*/
 
-    public static States checkCheck(Team team, ChessBoard board){
+    /*public static States checkCheck(Team team, ChessBoard board){
         ArrayList<TargetPoint> list = new ArrayList<TargetPoint>();
         TargetPoint king = board.getKing(team);
 
@@ -218,5 +218,5 @@ public class Rules {
         }
 
         return States.NONE;
-    }
+    }*/
 }

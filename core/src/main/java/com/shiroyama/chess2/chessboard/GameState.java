@@ -94,6 +94,7 @@ public class GameState implements InputProcessor {
             if (tileIdx.equals(move)) {
                 board.movePiece(selected, tileIdx);
                 currentTurn = (currentTurn == Team.WHITE) ? Team.BLACK : Team.WHITE;
+                System.out.println(selected.getX() + " " + selected.getY());
                 moved = true;
             }
         }
