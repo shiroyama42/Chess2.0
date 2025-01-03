@@ -12,6 +12,6 @@ public class PieceInfo {
     }
 
     public String getName(){
-        return ((team == Team.WHITE) ? "white" : "black") +pieceType.toString().toLowerCase();
+        return ((team == Team.WHITE) ? "white" : "black")+ "-" + pieceType.toString().toLowerCase();
     }
 }
