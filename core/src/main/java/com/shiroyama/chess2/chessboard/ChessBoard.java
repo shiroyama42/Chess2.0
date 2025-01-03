@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
+import org.apache.tools.ant.taskdefs.Tar;
 
 import java.util.HashMap;
 
@@ -25,6 +26,10 @@ public class ChessBoard {
 
     private TargetPoint whiteKing;
     private TargetPoint blackKing;
+
+    private TargetPoint lastFrom;
+    private TargetPoint lastTo;
+    private PieceInfo lastRemoved;
 
     public ChessBoard(int size, HashMap<String, Texture> textures) {
         this.size = size;
@@ -102,16 +107,48 @@ public class ChessBoard {
         }
     }
 
-    /*private void drawPiece(SpriteBatch batch, int col, int row){
-        PieceInfo info = pieces[col][row];
-        if (info == null){
-            return;
+    public TargetPoint getKing(Team team){
+        return (team == Team.WHITE) ? whiteKing : blackKing;
+    }
+
+    public PieceInfo getPiece(TargetPoint location){
+        if(!isInBounds(location)){
+            return null;
+        }
+        return pieces[location.getX()][location.getY()];
+    }
+
+    public void movePiece(TargetPoint from, TargetPoint to){
+        if (from.equals(whiteKing)){
+            whiteKing = to;
+        }else if(from.equals(blackKing)){
+            blackKing = to;
         }
 
-        String name = info.getName();
-        Sprite sprite = sprites.get(spriteIndexMap.get(name));
-        sprite.setX(col * squareSize + squareSize / 2 - sprite.getWidth() / 2);
-        sprite.setY(row * squareSize + squareSize / 2 - sprite.getHeight() / 2);
-        sprite.draw(batch);
-    }*/
+        lastFrom = from;
+        lastTo = to;
+        lastRemoved = pieces[to.getX()][to.getY()];
+
+        pieces[to.getX()][to.getY()] = pieces[from.getX()][from.getY()];
+        pieces[from.getX()][from.getY()] = null;
+    }
+
+    public TargetPoint getPoint(int x, int y){
+        return new TargetPoint(x / squareSize, 7-y/squareSize);
+    }
+
+
+    public boolean isInBounds(TargetPoint location){
+        return location.getX() < 8 && location.getX() >= 0 && location.getY() < 8 && location.getY() >= 0;
+    }
+
+    public void undoMove(){
+        PieceInfo temp = lastRemoved;
+        movePiece(lastTo, lastFrom);
+        pieces[lastFrom.getX()][lastFrom.getY()] = temp;
+    }
+
+    public IntRect getRectangle(TargetPoint point){
+        return new IntRect(point.getX()*squareSize, point.getY() * squareSize, squareSize, squareSize);
+    }
 }

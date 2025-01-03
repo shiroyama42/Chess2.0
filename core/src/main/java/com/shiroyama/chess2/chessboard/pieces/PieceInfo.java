@@ -2,8 +2,8 @@ package com.shiroyama.chess2.chessboard.pieces;
 
 public class PieceInfo {
 
-    private Team team;
-    private PieceType pieceType;
+    public Team team;
+    public PieceType pieceType;
 
     public PieceInfo(Team team, PieceType pieceType) {
         super();

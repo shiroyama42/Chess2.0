@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.shiroyama.chess2.chessboard.ChessBoard;
+import com.shiroyama.chess2.chessboard.GameState;
 import com.shiroyama.chess2.chessboard.TextureLoader;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class GameScreen implements Screen {
 
     private SpriteBatch batch;
     private ChessBoard board;
+    private GameState gameState;
 
     @Override
     public void show() {
@@ -27,6 +29,9 @@ public class GameScreen implements Screen {
         int size = (int) Math.min(h, w);
         board = new ChessBoard(size, textures);
         batch = new SpriteBatch();
+
+        gameState = new GameState(size, board);
+        Gdx.input.setInputProcessor(gameState);
     }
 
     @Override
@@ -36,6 +41,7 @@ public class GameScreen implements Screen {
 
         batch.begin();
         board.draw(batch);
+        gameState.draw(batch);
         batch.end();
     }
 
