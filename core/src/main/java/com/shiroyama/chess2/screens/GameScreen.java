@@ -46,7 +46,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //Gdx.graphics.setWindowedMode(700, 800);
+        //Gdx.graphics.setWindowedMode(1024, 800);
 
         batch.begin();
         board.draw(batch, centerX, centerY);
