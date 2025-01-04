@@ -19,7 +19,7 @@ public class ChessBoard {
 
     private Texture boardTexture;
 
-    private HashMap<String, Texture> textures;
+    private final HashMap<String, Texture> textures;
 
     private TargetPoint whiteKing;
     private TargetPoint blackKing;
@@ -87,18 +87,18 @@ public class ChessBoard {
         pixmap.dispose();
     }
 
-    public void draw(SpriteBatch batch) {
+    public void draw(SpriteBatch batch, float offsetX, float offsetY) {
         if (boardTexture == null) {
             generateTexture();
         }
-        batch.draw(boardTexture, 0, 0);
+        batch.draw(boardTexture, offsetX, offsetY);
         for (int col = 0; col < 8; col++) {
             for (int row = 0; row < 8; row++) {
                 PieceInfo piece = pieces[col][row];
                 if (piece != null) {
                     String pieceName = piece.getName();
                     Texture texture = textures.get(pieceName);
-                    batch.draw(texture, col * squareSize, row * squareSize, squareSize, squareSize);
+                    batch.draw(texture, offsetX + col * squareSize, offsetY + row * squareSize, squareSize, squareSize);
                 }
             }
         }

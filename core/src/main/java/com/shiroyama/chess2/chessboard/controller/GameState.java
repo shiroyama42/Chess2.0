@@ -25,11 +25,15 @@ public class GameState implements InputProcessor {
     private Texture overlayBoxTexture;
     private Sprite overlayBoxSprite;
 
-    public GameState(int size, ChessBoard board) {
+    private float centerX, centerY;
+
+    public GameState(int size, ChessBoard board, float centerX, float centerY) {
         validMoves = new ArrayList<TargetPoint>();
         currentTurn = Team.WHITE;
 
         this.size = size;
+        this.centerX = centerX;
+        this.centerY = centerY;
 
         IntRect rect = board.getRectangle(new TargetPoint(0, 0));
         int nextPow2 = Integer.highestOneBit(rect.getHeight() - 1) << 1;
@@ -50,14 +54,14 @@ public class GameState implements InputProcessor {
     public void draw(SpriteBatch batch) {
         if (selected != null) {
             IntRect tile = board.getRectangle(selected);
-            overlayBoxSprite.setPosition(tile.getX(), tile.getY());
+            overlayBoxSprite.setPosition(tile.getX() + centerX, tile.getY() + centerY);
             overlayBoxSprite.setColor(Color.GREEN);  // Green for selected piece
             overlayBoxSprite.draw(batch);
         }
 
         for (TargetPoint moveTile : validMoves) {
             IntRect tile = board.getRectangle(moveTile);
-            overlayBoxSprite.setPosition(tile.getX(), tile.getY());
+            overlayBoxSprite.setPosition(tile.getX() + centerX, tile.getY() + centerY);
 
             // Yellow for valid move, Red for capturing move
             Color color = (board.getPiece(moveTile) == null) ? Color.YELLOW : Color.RED;
@@ -87,7 +91,10 @@ public class GameState implements InputProcessor {
             return false;
         }
 
-        TargetPoint tileIdx = board.getPoint(x, y);
+        int adjustedX = x - (int)centerX;
+        int adjustedY = y - (int)centerY;
+
+        TargetPoint tileIdx = board.getPoint(adjustedX, adjustedY);
 
         boolean moved = false;
 
