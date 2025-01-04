@@ -1,16 +1,13 @@
-package com.shiroyama.chess2.chessboard;
+package com.shiroyama.chess2.chessboard.model;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.Array;
+import com.shiroyama.chess2.chessboard.controller.IntRect;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
-import org.apache.tools.ant.taskdefs.Tar;
 
 import java.util.HashMap;
 

@@ -1,6 +1,4 @@
-package com.shiroyama.chess2.chessboard;
-
-import java.util.Objects;
+package com.shiroyama.chess2.chessboard.model;
 
 public class TargetPoint {
 

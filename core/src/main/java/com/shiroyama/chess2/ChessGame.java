@@ -1,11 +1,12 @@
 package com.shiroyama.chess2;
 
 import com.badlogic.gdx.Game;
+import com.shiroyama.chess2.screens.MenuScreen;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
-public class Main extends Game {
+public class ChessGame extends Game {
     @Override
     public void create() {
-        setScreen(new GameScreen());
+        setScreen(new MenuScreen(this));
     }
 }

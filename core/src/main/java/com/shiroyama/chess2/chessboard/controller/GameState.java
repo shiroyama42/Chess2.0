@@ -1,4 +1,4 @@
-package com.shiroyama.chess2.chessboard;
+package com.shiroyama.chess2.chessboard.controller;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.shiroyama.chess2.chessboard.model.TargetPoint;
+import com.shiroyama.chess2.chessboard.model.ChessBoard;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.Rules;
 import com.shiroyama.chess2.chessboard.pieces.Team;

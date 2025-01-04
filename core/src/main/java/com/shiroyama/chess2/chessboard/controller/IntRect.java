@@ -1,4 +1,4 @@
-package com.shiroyama.chess2.chessboard;
+package com.shiroyama.chess2.chessboard.controller;
 
 public class IntRect {
 

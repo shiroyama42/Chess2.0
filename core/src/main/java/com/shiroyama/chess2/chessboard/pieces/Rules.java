@@ -1,9 +1,7 @@
 package com.shiroyama.chess2.chessboard.pieces;
 
-import com.shiroyama.chess2.chessboard.ChessBoard;
-import com.shiroyama.chess2.chessboard.TargetPoint;
-import groovyjarjarantlr4.v4.codegen.model.ArgAction;
-import org.apache.tools.ant.taskdefs.Tar;
+import com.shiroyama.chess2.chessboard.model.ChessBoard;
+import com.shiroyama.chess2.chessboard.model.TargetPoint;
 
 import java.util.ArrayList;
 

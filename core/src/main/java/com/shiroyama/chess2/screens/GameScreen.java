@@ -1,12 +1,12 @@
-package com.shiroyama.chess2;
+package com.shiroyama.chess2.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shiroyama.chess2.chessboard.ChessBoard;
-import com.shiroyama.chess2.chessboard.GameState;
+import com.shiroyama.chess2.chessboard.model.ChessBoard;
+import com.shiroyama.chess2.chessboard.controller.GameState;
 import com.shiroyama.chess2.chessboard.TextureLoader;
 
 import java.util.HashMap;
@@ -17,10 +17,14 @@ public class GameScreen implements Screen {
     private ChessBoard board;
     private GameState gameState;
 
+    private int boardSize;
+
     @Override
     public void show() {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
+
+        
 
         HashMap<String, Texture> textures = TextureLoader.loadPieceTextures();
 
