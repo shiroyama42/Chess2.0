@@ -67,4 +67,20 @@ public class Arena {
     public List<Projectile> getProjectiles(){
         return projectiles;
     }
+
+    public PieceInfo getAttacker() {
+        return attacker;
+    }
+
+    public void setAttacker(PieceInfo attacker) {
+        this.attacker = attacker;
+    }
+
+    public PieceInfo getDefender() {
+        return defender;
+    }
+
+    public void setDefender(PieceInfo defender) {
+        this.defender = defender;
+    }
 }
