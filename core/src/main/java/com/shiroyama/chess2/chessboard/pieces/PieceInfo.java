@@ -53,4 +53,8 @@ public class PieceInfo {
         Projectile projectile = new Projectile(this.team, position, targetPosition);
         projectiles.add(projectile);
     }
+
+    public Vector2 getPosition(){
+        return new Vector2(0, 0);
+    }
 }
