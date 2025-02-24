@@ -1,5 +1,10 @@
 package com.shiroyama.chess2.chessboard.pieces;
 
+import com.badlogic.gdx.math.Vector2;
+import com.shiroyama.chess2.arena.model.Projectile;
+
+import java.util.List;
+
 public class PieceInfo {
 
     public Team team;
@@ -41,5 +46,11 @@ public class PieceInfo {
             case KING: return 1f;
             default: return 1f;
         }
+    }
+
+    public void shoot(Vector2 targetPosition, List<Projectile> projectiles){
+        Vector2 position = new Vector2(0, 0);
+        Projectile projectile = new Projectile(this.team, position, targetPosition);
+        projectiles.add(projectile);
     }
 }
