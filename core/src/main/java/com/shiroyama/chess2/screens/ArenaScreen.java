@@ -9,9 +9,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.arena.model.Arena;
+import com.shiroyama.chess2.arena.model.PieceMovementHandler;
 import com.shiroyama.chess2.arena.model.Projectile;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
+import com.shiroyama.chess2.chessboard.pieces.Team;
 
 import java.util.List;
 
@@ -21,11 +23,13 @@ public class ArenaScreen implements Screen {
     private SpriteBatch batch;
     private Texture attackerTexture, defenderTexture, gunTexture, projectileTexture;
     private Arena arena;
+    private PieceMovementHandler movementHandler;
 
     public ArenaScreen(PieceInfo attacker, PieceInfo defender, ChessGame game){
         this.batch = new SpriteBatch();
         this.arena = new Arena(attacker, defender);
         this.game = game;
+        this.movementHandler = new PieceMovementHandler();
 
         attackerTexture = new Texture(attacker.getName() + ".png");
         defenderTexture = new Texture(defender.getName() + ".png");
@@ -113,37 +117,29 @@ public class ArenaScreen implements Screen {
 
     private void handleMovement() {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            //arena.getAttacker().moveUp();
-            System.out.println("white up");
+            movementHandler.moveUp((arena.getAttacker().team == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            //arena.getAttacker().moveDown();
-            System.out.println("white down");
+            movementHandler.moveDown((arena.getAttacker().team == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            //arena.getAttacker().moveLeft();
-            System.out.println("white left");
+            movementHandler.moveLeft((arena.getAttacker().team == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            //arena.getAttacker().moveRight();
-            System.out.println("white right");
+            movementHandler.moveRight((arena.getAttacker().team == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            //arena.getDefender().moveUp();
-            System.out.println("black up");
+            movementHandler.moveUp((arena.getDefender().team == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            //arena.getDefender().moveDown();
-            System.out.println("black down");
+            movementHandler.moveDown((arena.getDefender().team == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            //arena.getDefender().moveLeft();
-            System.out.println("black left");
+            movementHandler.moveLeft((arena.getDefender().team == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            //arena.getDefender().moveRight();
-            System.out.println("black right");
+            movementHandler.moveRight((arena.getDefender().team == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
         }
     }
 
