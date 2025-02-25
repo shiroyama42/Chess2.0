@@ -19,8 +19,8 @@ public class Projectile {
 
     public void update(float deltaTime){
         position = new TargetPoint(
-            position.getX() + velicoty.getX(),
-            position.getY() + velicoty.getY()
+            position.getX() + velicoty.getX() * deltaTime,
+            position.getY() + velicoty.getY() * deltaTime
         );
     }
 
