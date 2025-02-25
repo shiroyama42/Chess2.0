@@ -36,9 +36,9 @@ public class Projectile {
     }
 
     private TargetPoint calculateVelocity(TargetPoint start, TargetPoint target){
-        int dx = target.getX() - start.getX();
-        int dy = target.getY() - start.getY();
+        float dx = target.getX() - start.getX();
+        float dy = target.getY() - start.getY();
         double length = Math.sqrt(dx * dx + dy * dy);
-        return new TargetPoint((int) (dx / length * 5), (int) (dy / length * 5));
+        return new TargetPoint((float) (dx / length * 5), (float) (dy / length * 5));
     }
 }

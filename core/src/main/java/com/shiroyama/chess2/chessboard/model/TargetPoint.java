@@ -2,9 +2,9 @@ package com.shiroyama.chess2.chessboard.model;
 
 public class TargetPoint {
 
-    private int x, y;
+    private float x, y;
 
-    public TargetPoint(int x, int y) {
+    public TargetPoint(float x, float y) {
         super();
         this.x = x;
         this.y = y;
@@ -19,23 +19,23 @@ public class TargetPoint {
         return other.getX() == x && other.getY() == y;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
-    public TargetPoint Transpose(int x, int y){
+    public TargetPoint Transpose(float x, float y){
         return new TargetPoint(this.x + x, this.y + y);
     }
 }

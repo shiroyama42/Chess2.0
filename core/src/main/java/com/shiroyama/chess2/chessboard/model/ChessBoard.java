@@ -115,13 +115,13 @@ public class ChessBoard {
         if(!isInBounds(location)){
             return null;
         }
-        return pieces[location.getX()][location.getY()];
+        return pieces[(int)location.getX()][(int)location.getY()];
     }
 
     public void movePiece(TargetPoint from, TargetPoint to){
 
-        PieceInfo piece = pieces[from.getX()][from.getY()];
-        PieceInfo target = pieces[to.getX()][to.getY()];
+        PieceInfo piece = pieces[(int)from.getX()][(int)from.getY()];
+        PieceInfo target = pieces[(int)to.getX()][(int)to.getY()];
 
         if (target != null && attackListener != null){
 
@@ -131,9 +131,9 @@ public class ChessBoard {
             attackListener.onAttack(piece, target);
 
         }else{
-            pieces[to.getX()][to.getY()] = piece;
-            pieces[to.getX()][to.getY()].setPosition(to);
-            pieces[from.getX()][from.getY()] = null;
+            pieces[(int)to.getX()][(int)to.getY()] = piece;
+            pieces[(int)to.getX()][(int)to.getY()].setPosition(to);
+            pieces[(int)from.getX()][(int)from.getY()] = null;
         }
     }
 
@@ -149,11 +149,11 @@ public class ChessBoard {
     public void undoMove(){
         PieceInfo temp = lastRemoved;
         movePiece(lastTo, lastFrom);
-        pieces[lastFrom.getX()][lastFrom.getY()] = temp;
+        pieces[(int)lastFrom.getX()][(int)lastFrom.getY()] = temp;
     }
 
     public IntRect getRectangle(TargetPoint point){
-        return new IntRect(point.getX()*squareSize, point.getY() * squareSize, squareSize, squareSize);
+        return new IntRect((int)point.getX()*squareSize, (int)point.getY() * squareSize, squareSize, squareSize);
     }
 
     public interface onAttackListener{
