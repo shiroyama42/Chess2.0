@@ -1,6 +1,7 @@
 package com.shiroyama.chess2.arena.model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class Arena {
                 iterator.remove();
             }
 
-            if (projectile.isOutOfBounds(new Vector2(800, 800))){
+            if (projectile.isOutOfBounds(new TargetPoint(800, 600))){
                 iterator.remove();
             }
         }

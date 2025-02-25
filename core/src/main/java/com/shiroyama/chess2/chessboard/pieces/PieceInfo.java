@@ -2,6 +2,7 @@ package com.shiroyama.chess2.chessboard.pieces;
 
 import com.badlogic.gdx.math.Vector2;
 import com.shiroyama.chess2.arena.model.Projectile;
+import com.shiroyama.chess2.chessboard.model.TargetPoint;
 
 import java.util.List;
 
@@ -11,11 +12,13 @@ public class PieceInfo {
     public PieceType pieceType;
     public int hp;
     public float attackRate;
+    public TargetPoint position;
 
-    public PieceInfo(Team team, PieceType pieceType) {
+    public PieceInfo(Team team, PieceType pieceType, TargetPoint position) {
         super();
         this.team = team;
         this.pieceType = pieceType;
+        this.position = position;
         this.hp = getBaseHP(pieceType);
         this.attackRate = getAttackRate(pieceType);
     }
@@ -48,13 +51,16 @@ public class PieceInfo {
         }
     }
 
-    public void shoot(Vector2 targetPosition, List<Projectile> projectiles){
-        Vector2 position = new Vector2(0, 0);
+    public void shoot(TargetPoint targetPosition, List<Projectile> projectiles){
         Projectile projectile = new Projectile(this.team, position, targetPosition);
         projectiles.add(projectile);
     }
 
-    public Vector2 getPosition(){
-        return new Vector2(0, 0);
+    public TargetPoint getPosition(){
+        return position;
+    }
+
+    public void setPosition(TargetPoint position){
+        this.position = position;
     }
 }

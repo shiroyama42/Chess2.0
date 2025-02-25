@@ -1,9 +1,11 @@
 package com.shiroyama.chess2.chessboard.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.shiroyama.chess2.arena.model.Arena;
 import com.shiroyama.chess2.chessboard.controller.IntRect;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
@@ -43,29 +45,29 @@ public class ChessBoard {
     private void initializePieces(){
 
         // Black pieces
-        pieces[0][0] = new PieceInfo(Team.BLACK, PieceType.ROOK);
-        pieces[1][0] = new PieceInfo(Team.BLACK, PieceType.KNIGHT);
-        pieces[2][0] = new PieceInfo(Team.BLACK, PieceType.BISHOP);
-        pieces[3][0] = new PieceInfo(Team.BLACK, PieceType.KING);
-        pieces[4][0] = new PieceInfo(Team.BLACK, PieceType.QUEEN);
-        pieces[5][0] = new PieceInfo(Team.BLACK, PieceType.BISHOP);
-        pieces[6][0] = new PieceInfo(Team.BLACK, PieceType.KNIGHT);
-        pieces[7][0] = new PieceInfo(Team.BLACK, PieceType.ROOK);
+        pieces[0][0] = new PieceInfo(Team.BLACK, PieceType.ROOK, new TargetPoint(0, 0));
+        pieces[1][0] = new PieceInfo(Team.BLACK, PieceType.KNIGHT, new TargetPoint(1, 0));
+        pieces[2][0] = new PieceInfo(Team.BLACK, PieceType.BISHOP, new TargetPoint(2, 0));
+        pieces[3][0] = new PieceInfo(Team.BLACK, PieceType.KING, new TargetPoint(3, 0));
+        pieces[4][0] = new PieceInfo(Team.BLACK, PieceType.QUEEN, new TargetPoint(4, 0));
+        pieces[5][0] = new PieceInfo(Team.BLACK, PieceType.BISHOP, new TargetPoint(5, 0));
+        pieces[6][0] = new PieceInfo(Team.BLACK, PieceType.KNIGHT, new TargetPoint(6, 0));
+        pieces[7][0] = new PieceInfo(Team.BLACK, PieceType.ROOK, new TargetPoint(7, 0));
         for (int i = 0; i < 8; i++) {
-            pieces[i][1] = new PieceInfo(Team.BLACK, PieceType.PAWN);
+            pieces[i][1] = new PieceInfo(Team.BLACK, PieceType.PAWN, new TargetPoint(i, 1));
         }
 
         // White pieces
-        pieces[0][7] = new PieceInfo(Team.WHITE, PieceType.ROOK);
-        pieces[1][7] = new PieceInfo(Team.WHITE, PieceType.KNIGHT);
-        pieces[2][7] = new PieceInfo(Team.WHITE, PieceType.BISHOP);
-        pieces[3][7] = new PieceInfo(Team.WHITE, PieceType.KING);
-        pieces[4][7] = new PieceInfo(Team.WHITE, PieceType.QUEEN);
-        pieces[5][7] = new PieceInfo(Team.WHITE, PieceType.BISHOP);
-        pieces[6][7] = new PieceInfo(Team.WHITE, PieceType.KNIGHT);
-        pieces[7][7] = new PieceInfo(Team.WHITE, PieceType.ROOK);
+        pieces[0][7] = new PieceInfo(Team.WHITE, PieceType.ROOK, new TargetPoint(0, 7));
+        pieces[1][7] = new PieceInfo(Team.WHITE, PieceType.KNIGHT, new TargetPoint(1, 7));
+        pieces[2][7] = new PieceInfo(Team.WHITE, PieceType.BISHOP, new TargetPoint(2, 7));
+        pieces[3][7] = new PieceInfo(Team.WHITE, PieceType.KING, new TargetPoint(3, 7));
+        pieces[4][7] = new PieceInfo(Team.WHITE, PieceType.QUEEN, new TargetPoint(4, 7));
+        pieces[5][7] = new PieceInfo(Team.WHITE, PieceType.BISHOP, new TargetPoint(5, 7));
+        pieces[6][7] = new PieceInfo(Team.WHITE, PieceType.KNIGHT, new TargetPoint(6, 7));
+        pieces[7][7] = new PieceInfo(Team.WHITE, PieceType.ROOK, new TargetPoint(7, 7));
         for (int i = 0; i < 8; i++) {
-            pieces[i][6] = new PieceInfo(Team.WHITE, PieceType.PAWN);
+            pieces[i][6] = new PieceInfo(Team.WHITE, PieceType.PAWN, new TargetPoint(i, 6));
         }
     }
 
@@ -117,18 +119,22 @@ public class ChessBoard {
     }
 
     public void movePiece(TargetPoint from, TargetPoint to){
-        if (from.equals(whiteKing)){
-            whiteKing = to;
-        }else if(from.equals(blackKing)){
-            blackKing = to;
+
+        PieceInfo piece = pieces[from.getX()][from.getY()];
+        PieceInfo target = pieces[to.getX()][to.getY()];
+
+        if (target != null && attackListener != null){
+
+            piece.setPosition(from);
+            target.setPosition(to);
+
+            attackListener.onAttack(piece, target);
+
+        }else{
+            pieces[to.getX()][to.getY()] = piece;
+            pieces[to.getX()][to.getY()].setPosition(to);
+            pieces[from.getX()][from.getY()] = null;
         }
-
-        lastFrom = from;
-        lastTo = to;
-        lastRemoved = pieces[to.getX()][to.getY()];
-
-        pieces[to.getX()][to.getY()] = pieces[from.getX()][from.getY()];
-        pieces[from.getX()][from.getY()] = null;
     }
 
     public TargetPoint getPoint(int x, int y){
@@ -148,5 +154,21 @@ public class ChessBoard {
 
     public IntRect getRectangle(TargetPoint point){
         return new IntRect(point.getX()*squareSize, point.getY() * squareSize, squareSize, squareSize);
+    }
+
+    public interface onAttackListener{
+        void onAttack(PieceInfo attacker, PieceInfo defender);
+    }
+
+    private onAttackListener attackListener;
+
+    public void setOnAttackListener(onAttackListener listener){
+        this.attackListener = listener;
+    }
+
+    private void onAttack(PieceInfo attacker, PieceInfo defender){
+        if (attackListener != null){
+            attackListener.onAttack(attacker, defender);
+        }
     }
 }

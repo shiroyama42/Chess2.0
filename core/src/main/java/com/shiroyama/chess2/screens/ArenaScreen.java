@@ -7,24 +7,26 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.arena.model.Arena;
+import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
-import com.sun.xml.internal.bind.v2.TODO;
 
 public class ArenaScreen implements Screen {
 
+    private ChessGame game;
     private SpriteBatch batch;
     private Texture attackerTexture, defenderTexture, gunTexture;
     private Arena arena;
 
-    public ArenaScreen(PieceInfo attacker, PieceInfo defender){
+    public ArenaScreen(PieceInfo attacker, PieceInfo defender, ChessGame game){
         this.batch = new SpriteBatch();
         this.arena = new Arena(attacker, defender);
+        this.game = game;
 
         attackerTexture = new Texture(attacker.getName() + ".png");
         defenderTexture = new Texture(defender.getName() + ".png");
 
-        //TODO: texture for projectile and gun
         gunTexture = new Texture("gun.png");
     }
 
@@ -37,6 +39,11 @@ public class ArenaScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         arena.update(delta);
+
+        if (arena.isCombatOver()){
+            PieceInfo winner = arena.attackerWon() ? arena.getAttacker() : null;
+
+        }
 
         batch.begin();
         drawPiece(attackerTexture, arena.getAttacker().getPosition(), arena.getDefender().getPosition(), gunTexture);
@@ -76,15 +83,20 @@ public class ArenaScreen implements Screen {
         gunTexture.dispose();
     }
 
-    private void drawPiece(Texture texture, Vector2 position, Vector2 targetPosition, Texture gunTexture){
-        batch.draw(texture, position.x - 20, position.y -20, 40, 40);
+    private void drawPiece(Texture texture, TargetPoint position, TargetPoint targetPosition, Texture gunTexture){
+        if(position == null || targetPosition == null){
+            return;
+        }
+
+        batch.draw(texture, position.getX() * 50, position.getY() * 50, 50, 50);
+
         float angle = getGunAngle(targetPosition, position);
-        batch.draw(gunTexture, position.x - 10, position.y - 10, 10, 10, 20, 20);
+        batch.draw(gunTexture, position.getX() * 50, position.getY() * 50, 25, 25, 50, 50);
     }
 
-    private float getGunAngle(Vector2 targetPosition, Vector2 piecePosition){
-        float dx = targetPosition.x - piecePosition.x;
-        float dy = targetPosition.y - piecePosition.y;
+    private float getGunAngle(TargetPoint targetPosition, TargetPoint piecePosition){
+        float dx = targetPosition.getX() - piecePosition.getX();
+        float dy = targetPosition.getY() - piecePosition.getY();
         return (float) Math.toDegrees(Math.atan2(dy, dx));
     }
 

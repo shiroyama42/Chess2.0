@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.chessboard.model.ChessBoard;
 import com.shiroyama.chess2.chessboard.controller.GameState;
 import com.shiroyama.chess2.chessboard.TextureLoader;
@@ -15,11 +16,16 @@ import java.util.HashMap;
 
 public class GameScreen implements Screen {
 
+    private ChessGame game;
     private SpriteBatch batch;
     private ChessBoard board;
     private GameState gameState;
 
     private float centerX, centerY;
+
+    public GameScreen(){
+        this.game = (ChessGame) Gdx.app.getApplicationListener();
+    }
 
     @Override
     public void show() {
@@ -36,6 +42,12 @@ public class GameScreen implements Screen {
         batch = new SpriteBatch();
 
         gameState = new GameState(size, board, centerX, centerY);
+
+        board.setOnAttackListener((attacker, defender) -> {
+            game.setScreen(new ArenaScreen(attacker, defender, game));
+        });
+
+
         Gdx.input.setInputProcessor(gameState);
 
 
@@ -77,5 +89,9 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
+    }
+
+    public ChessBoard getBoard(){
+        return board;
     }
 }

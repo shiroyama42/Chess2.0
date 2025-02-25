@@ -1,6 +1,9 @@
 package com.shiroyama.chess2;
 
 import com.badlogic.gdx.Game;
+import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
+import com.shiroyama.chess2.chessboard.pieces.PieceType;
+import com.shiroyama.chess2.screens.GameScreen;
 import com.shiroyama.chess2.screens.MenuScreen;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -10,5 +13,10 @@ public class ChessGame extends Game {
         setScreen(new MenuScreen(this));
     }
 
-
+    public void returnToGameScreen(PieceInfo winner, PieceInfo loser){
+        if (winner != null){
+            ((GameScreen) getScreen()).getBoard().movePiece(loser.getPosition(), winner.getPosition());
+        }
+        setScreen(new GameScreen());
+    }
 }
