@@ -1,7 +1,6 @@
 package com.shiroyama.chess2.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,9 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.chessboard.model.ChessBoard;
 import com.shiroyama.chess2.chessboard.controller.GameState;
-import com.shiroyama.chess2.chessboard.TextureLoader;
+import com.shiroyama.chess2.utils.TextureLoader;
 
-import java.awt.*;
 import java.util.HashMap;
 
 public class GameScreen implements Screen {

@@ -1,4 +1,4 @@
-package com.shiroyama.chess2.chessboard;
+package com.shiroyama.chess2.utils;
 
 import com.badlogic.gdx.graphics.Texture;
 
