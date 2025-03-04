@@ -15,7 +15,8 @@ import java.util.HashMap;
 
 public class ChessBoard {
 
-    private PieceInfo[][] pieces;
+    public PieceInfo[][] pieces;
+
     private int size;
     private int squareSize;
 
@@ -94,6 +95,7 @@ public class ChessBoard {
             generateTexture();
         }
         batch.draw(boardTexture, offsetX, offsetY);
+
         for (int col = 0; col < 8; col++) {
             for (int row = 0; row < 8; row++) {
                 PieceInfo piece = pieces[col][row];
@@ -121,6 +123,11 @@ public class ChessBoard {
     public void movePiece(TargetPoint from, TargetPoint to){
 
         PieceInfo piece = pieces[(int)from.getX()][(int)from.getY()];
+        if (piece == null) {
+            // Trying to move from an empty square, should not happen
+            System.out.println("Error: No piece at " + from.getX() + ", " + from.getY());
+            return;
+        }
         PieceInfo target = pieces[(int)to.getX()][(int)to.getY()];
 
         if (target != null && attackListener != null){
@@ -128,12 +135,15 @@ public class ChessBoard {
             piece.setPosition(from);
             target.setPosition(to);
 
+            System.out.println("moved to: " + to.getX() + "-" + to.getY());
+
             attackListener.onAttack(piece, target);
 
         }else{
             pieces[(int)to.getX()][(int)to.getY()] = piece;
             pieces[(int)to.getX()][(int)to.getY()].setPosition(to);
             pieces[(int)from.getX()][(int)from.getY()] = null;
+            System.out.println("moved to: " + to.getX() + "-" + to.getY());
         }
     }
 
@@ -144,12 +154,6 @@ public class ChessBoard {
 
     public boolean isInBounds(TargetPoint location){
         return location.getX() < 8 && location.getX() >= 0 && location.getY() < 8 && location.getY() >= 0;
-    }
-
-    public void undoMove(){
-        PieceInfo temp = lastRemoved;
-        movePiece(lastTo, lastFrom);
-        pieces[(int)lastFrom.getX()][(int)lastFrom.getY()] = temp;
     }
 
     public IntRect getRectangle(TargetPoint point){

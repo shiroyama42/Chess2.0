@@ -55,7 +55,7 @@ public class GameState implements InputProcessor {
         if (selected != null) {
             IntRect tile = board.getRectangle(selected);
             overlayBoxSprite.setPosition(tile.getX() + centerX, tile.getY() + centerY);
-            overlayBoxSprite.setColor(Color.GREEN);  // Green for selected piece
+            overlayBoxSprite.setColor(Color.GREEN);
             overlayBoxSprite.draw(batch);
         }
 
@@ -63,7 +63,6 @@ public class GameState implements InputProcessor {
             IntRect tile = board.getRectangle(moveTile);
             overlayBoxSprite.setPosition(tile.getX() + centerX, tile.getY() + centerY);
 
-            // Yellow for valid move, Red for capturing move
             Color color = (board.getPiece(moveTile) == null) ? Color.YELLOW : Color.RED;
             overlayBoxSprite.setColor(color);
             overlayBoxSprite.draw(batch);
@@ -98,12 +97,10 @@ public class GameState implements InputProcessor {
 
         boolean moved = false;
 
-        // Check if the click is on a valid move square
         for (TargetPoint move : validMoves) {
             if (tileIdx.equals(move)) {
                 board.movePiece(selected, tileIdx);
                 currentTurn = (currentTurn == Team.WHITE) ? Team.BLACK : Team.WHITE;
-                System.out.println(selected.getX() + " " + selected.getY());
                 moved = true;
             }
         }
@@ -111,7 +108,6 @@ public class GameState implements InputProcessor {
         validMoves.clear();
         selected = null;
 
-        // If no piece was moved, check if a new piece can be selected
         if (!moved) {
             PieceInfo piece = board.getPiece(tileIdx);
             if (piece != null && piece.team == currentTurn) {
@@ -120,7 +116,7 @@ public class GameState implements InputProcessor {
             }
         }
 
-        return true;  // Return true to handle input
+        return true;
     }
 
     @Override

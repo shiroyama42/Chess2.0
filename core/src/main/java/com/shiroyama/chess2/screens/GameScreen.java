@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.chessboard.model.ChessBoard;
 import com.shiroyama.chess2.chessboard.controller.GameState;
+import com.shiroyama.chess2.chessboard.model.TargetPoint;
+import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.utils.TextureLoader;
 
 import java.util.HashMap;
@@ -20,6 +22,11 @@ public class GameScreen implements Screen {
     private GameState gameState;
 
     private float centerX, centerY;
+
+    private boolean isInArena = false;
+    private ArenaScreen arenaScreen;
+
+    private TargetPoint originalAttackerPosition, originalDefenderPosition;
 
     public GameScreen(){
         this.game = (ChessGame) Gdx.app.getApplicationListener();
@@ -42,13 +49,14 @@ public class GameScreen implements Screen {
         gameState = new GameState(size, board, centerX, centerY);
 
         board.setOnAttackListener((attacker, defender) -> {
-            game.setScreen(new ArenaScreen(attacker, defender, game));
+            originalAttackerPosition = new TargetPoint(attacker.getPosition().getX(), attacker.getPosition().getY());
+            originalDefenderPosition = new TargetPoint(defender.getPosition().getX(), defender.getPosition().getY());
+
+            isInArena = true;
+            arenaScreen = new ArenaScreen(attacker, defender, game);
         });
 
-
         Gdx.input.setInputProcessor(gameState);
-
-
     }
 
     @Override
@@ -56,11 +64,13 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //Gdx.graphics.setWindowedMode(1024, 800);
-
         batch.begin();
-        board.draw(batch, centerX, centerY);
-        gameState.draw(batch);
+        if (isInArena){
+            arenaScreen.render(delta);
+        }else{
+            board.draw(batch, centerX, centerY);
+            gameState.draw(batch);
+        }
         batch.end();
     }
 
@@ -91,5 +101,19 @@ public class GameScreen implements Screen {
 
     public ChessBoard getBoard(){
         return board;
+    }
+
+    public void exitArena(PieceInfo winner, PieceInfo loser){
+        isInArena = false;
+        if (winner == null){
+            board.pieces[(int)originalAttackerPosition.getX()][(int)originalAttackerPosition.getY()] = null;
+
+        }else{
+            board.pieces[(int)originalAttackerPosition.getX()][(int)originalAttackerPosition.getY()] = null;
+            board.pieces[(int)originalDefenderPosition.getX()][(int)originalDefenderPosition.getY()] = winner;
+            winner.setPosition(originalDefenderPosition);
+        }
+
+
     }
 }

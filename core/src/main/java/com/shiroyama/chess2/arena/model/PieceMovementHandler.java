@@ -4,8 +4,8 @@ import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 
 public class PieceMovementHandler {
 
-    private static final float MAX_X = 11.7f;
-    private static final float MAX_Y = 8.5f;
+    private static final float MAX_X = 7f;
+    private static final float MAX_Y = 7f;
 
     public void moveUp(PieceInfo piece){
         if (piece != null && piece.getPosition() != null && piece.getPosition().getY() < MAX_Y){

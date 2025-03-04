@@ -51,7 +51,10 @@ public class ArenaScreen implements Screen {
 
         if (arena.isCombatOver()){
             PieceInfo winner = arena.attackerWon() ? arena.getAttacker() : null;
+            PieceInfo loser = arena.attackerWon() ? arena.getDefender() : arena.getAttacker();
 
+            ((GameScreen) game.getScreen()).exitArena(winner, loser);
+            return;
         }
 
         batch.begin();
@@ -63,9 +66,7 @@ public class ArenaScreen implements Screen {
             batch.draw(projectileTexture, projectile.position.getX() * 50, projectile.position.getY() * 50, 10, 10);
         }
 
-
         batch.end();
-
 
         handleMovement();
     }

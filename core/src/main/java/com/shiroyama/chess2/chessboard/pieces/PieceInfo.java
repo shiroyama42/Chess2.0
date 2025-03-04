@@ -43,8 +43,8 @@ public class PieceInfo {
         switch (pieceType){
             case PAWN: return 1f;
             case KNIGHT: return 1.5f;
-            case BISHOP: return 2f;
-            case ROOK: return 2.5f;
+            case BISHOP: return 2.5f;
+            case ROOK: return 2f;
             case QUEEN: return 3f;
             case KING: return 1f;
             default: return 1f;
