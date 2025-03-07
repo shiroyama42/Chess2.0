@@ -5,14 +5,22 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.arena.model.Arena;
 import com.shiroyama.chess2.arena.model.PieceMovementHandler;
 import com.shiroyama.chess2.arena.model.Projectile;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
+import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
 
 import java.util.List;
@@ -25,6 +33,14 @@ public class ArenaScreen implements Screen {
     private Arena arena;
     private PieceMovementHandler movementHandler;
 
+    private BitmapFont font;
+    private GlyphLayout layout;
+    private Stage stage;
+    private Skin skin;
+    private boolean kingDied = false;
+    private String gameOverMessage;
+    private TextButton menuButton;
+
     public ArenaScreen(PieceInfo attacker, PieceInfo defender, ChessGame game){
         this.batch = new SpriteBatch();
         this.arena = new Arena(attacker, defender);
@@ -36,6 +52,16 @@ public class ArenaScreen implements Screen {
 
         gunTexture = new Texture("gun.png");
         projectileTexture = new Texture("projectile.png");
+
+        font = new BitmapFont();
+        font.getData().setScale(3);
+        font.setColor(1, 0, 0, 1);
+        layout = new GlyphLayout();
+
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
+        stage = new Stage(new ScreenViewport());
+
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -47,14 +73,42 @@ public class ArenaScreen implements Screen {
         Gdx.gl.glClearColor(254f / 255f, 156f / 255f, 28f / 255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        arena.update(delta);
+        if (!kingDied){
+            arena.update(delta);
+        }
 
-        if (arena.isCombatOver()){
+        if (!kingDied && arena.isCombatOver()){
             PieceInfo winner = arena.attackerWon() ? arena.getAttacker() : null;
             PieceInfo loser = arena.attackerWon() ? arena.getDefender() : arena.getAttacker();
 
-            ((GameScreen) game.getScreen()).exitArena(winner, loser);
-            return;
+            if(loser.pieceType == PieceType.KING){
+                kingDied = true;
+                String winningTeam = winner.team == Team.WHITE ? "WHITE" : "BLACK";
+
+                String losingTeam = loser.team == Team.WHITE ? "WHITE" : "BLACK";
+
+                gameOverMessage = losingTeam + " KING DIED, " + winningTeam + " TEAM WON!";
+
+                menuButton = new TextButton("Return to Menu", skin);
+                menuButton.setSize((float) (Gdx.graphics.getWidth() * 0.3), 60);
+                menuButton.setPosition(
+                    (Gdx.graphics.getWidth() - menuButton.getWidth()) / 2,
+                    Gdx.graphics.getHeight() / 4
+                );
+                menuButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent changeEvent, Actor actor) {
+                        game.create();
+                    }
+                });
+
+                stage.addActor(menuButton);
+            }else{
+                ((GameScreen) game.getScreen()).exitArena(winner, loser);
+                return;
+            }
+
+
         }
 
         batch.begin();
@@ -66,9 +120,21 @@ public class ArenaScreen implements Screen {
             batch.draw(projectileTexture, projectile.position.getX() * 50, projectile.position.getY() * 50, 10, 10);
         }
 
+        if (kingDied && gameOverMessage != null) {
+            layout.setText(font, gameOverMessage);
+            float textX = (Gdx.graphics.getWidth() - layout.width) / 2;
+            float textY = Gdx.graphics.getHeight() / 2 + layout.height / 2;
+            font.draw(batch, gameOverMessage, textX, textY);
+        }
+
         batch.end();
 
-        handleMovement();
+        if (kingDied) {
+            stage.act(delta);
+            stage.draw();
+        } else {
+            handleMovement();
+        }
     }
 
     @Override
@@ -97,6 +163,11 @@ public class ArenaScreen implements Screen {
         attackerTexture.dispose();
         defenderTexture.dispose();
         gunTexture.dispose();
+        font.dispose();
+        stage.dispose();
+        if (skin != null) {
+            skin.dispose();
+        }
     }
 
     private void drawPiece(Texture texture, TargetPoint position, TargetPoint targetPosition, Texture gunTexture){
