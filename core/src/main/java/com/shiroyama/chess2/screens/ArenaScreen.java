@@ -87,7 +87,7 @@ public class ArenaScreen implements Screen {
 
                 String losingTeam = loser.team == Team.WHITE ? "WHITE" : "BLACK";
 
-                gameOverMessage = losingTeam + " KING DIED, " + winningTeam + " TEAM WON!";
+                gameOverMessage = losingTeam + " KING DIED\n" + winningTeam + " TEAM WON!";
 
                 menuButton = new TextButton("Return to Menu", skin);
                 menuButton.setSize((float) (Gdx.graphics.getWidth() * 0.3), 60);
