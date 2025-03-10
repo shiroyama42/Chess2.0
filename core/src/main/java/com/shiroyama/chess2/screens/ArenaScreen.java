@@ -178,7 +178,27 @@ public class ArenaScreen implements Screen {
         batch.draw(texture, position.getX() * 50, position.getY() * 50, 50, 50);
 
         float angle = getGunAngle(targetPosition, position);
-        batch.draw(gunTexture, position.getX() * 50, position.getY() * 50, 10, 10, 5, 5);
+        float gunWidth =  10;
+        float gunHeight = 10;
+        float gunOffset = 5;
+
+        batch.draw(gunTexture,
+            position.getX() * 50 + gunOffset - gunWidth / 2,
+            position.getY() * 50 + gunOffset - gunHeight / 2,
+            gunWidth / 2,
+            gunHeight / 2,
+            gunWidth,
+            gunHeight,
+            6,
+            6,
+            angle,
+            0,
+            0,
+            gunTexture.getWidth(),
+            gunTexture.getHeight(),
+            false,
+            false
+        );
     }
 
     private float getGunAngle(TargetPoint targetPosition, TargetPoint piecePosition){

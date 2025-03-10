@@ -29,7 +29,7 @@ public class PieceInfo {
 
     private int getBaseHP(PieceType pieceType){
         switch (pieceType){
-            case PAWN: return 1;
+            case PAWN: return 100000;
             case KNIGHT: return 10;
             case BISHOP: return 3;
             case ROOK: return 10;

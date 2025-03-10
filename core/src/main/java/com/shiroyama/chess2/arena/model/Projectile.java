@@ -10,6 +10,7 @@ public class Projectile {
     public Team shooterTeam;
     public TargetPoint position;
     public TargetPoint velicoty;
+    public static final float PROJECTILE_SIZE = 10;
 
     public Projectile(Team shooterTeam, TargetPoint startPosition, TargetPoint targetPosition){
         this.shooterTeam = shooterTeam;
@@ -30,9 +31,21 @@ public class Projectile {
     }
 
     public boolean hit(PieceInfo piece){
+
+        float pieceX = piece.getPosition().getX() * 50;
+        float pieceY = piece.getPosition().getY() * 50;
+        float projectileX = position.getX() * 50;
+        float projectileY = position.getY() * 50;
+
+        float pieceSize = 50f;
+
         return piece.team != shooterTeam
-            && Math.abs(position.getX() - piece.getPosition().getX()) <= 1
-            && Math.abs(position.getY() - piece.getPosition().getY()) <= 1;
+            //&& Math.abs(position.getX() - piece.getPosition().getX()) <= 1
+            //&& Math.abs(position.getY() - piece.getPosition().getY()) <= 1;
+            && projectileX < pieceX + pieceSize
+            && projectileX + PROJECTILE_SIZE > pieceX
+            && projectileY < pieceY + pieceSize
+            && projectileY + PROJECTILE_SIZE > pieceY;
     }
 
     private TargetPoint calculateVelocity(TargetPoint start, TargetPoint target){

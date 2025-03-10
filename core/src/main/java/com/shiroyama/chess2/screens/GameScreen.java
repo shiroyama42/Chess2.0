@@ -114,6 +114,6 @@ public class GameScreen implements Screen {
             winner.setPosition(originalDefenderPosition);
         }
 
-
+        Gdx.input.setInputProcessor(gameState);
     }
 }
