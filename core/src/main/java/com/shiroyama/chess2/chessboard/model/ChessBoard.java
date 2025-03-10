@@ -1,11 +1,9 @@
 package com.shiroyama.chess2.chessboard.model;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.shiroyama.chess2.arena.model.Arena;
 import com.shiroyama.chess2.chessboard.controller.IntRect;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
@@ -26,10 +24,6 @@ public class ChessBoard {
 
     private TargetPoint whiteKing;
     private TargetPoint blackKing;
-
-    private TargetPoint lastFrom;
-    private TargetPoint lastTo;
-    private PieceInfo lastRemoved;
 
     public ChessBoard(int size, HashMap<String, Texture> textures) {
         this.size = size;
@@ -108,7 +102,6 @@ public class ChessBoard {
         }
     }
 
-
     public TargetPoint getKing(Team team){
         return (team == Team.WHITE) ? whiteKing : blackKing;
     }
@@ -124,7 +117,6 @@ public class ChessBoard {
 
         PieceInfo piece = pieces[(int)from.getX()][(int)from.getY()];
         if (piece == null) {
-            // Trying to move from an empty square, should not happen
             System.out.println("Error: No piece at " + from.getX() + ", " + from.getY());
             return;
         }
@@ -150,7 +142,6 @@ public class ChessBoard {
     public TargetPoint getPoint(int x, int y){
         return new TargetPoint(x / squareSize, 7-y/squareSize);
     }
-
 
     public boolean isInBounds(TargetPoint location){
         return location.getX() < 8 && location.getX() >= 0 && location.getY() < 8 && location.getY() >= 0;
