@@ -47,11 +47,11 @@ public class ArenaScreen implements Screen {
         this.game = game;
         this.movementHandler = new PieceMovementHandler();
 
-        attackerTexture = new Texture(attacker.getName() + ".png");
-        defenderTexture = new Texture(defender.getName() + ".png");
+        attackerTexture = new Texture("chess_pieces/" + attacker.getName() + ".png");
+        defenderTexture = new Texture("chess_pieces/" + defender.getName() + ".png");
 
-        gunTexture = new Texture("gun.png");
-        projectileTexture = new Texture("projectile.png");
+        gunTexture = new Texture("arena_textures/gun.png");
+        projectileTexture = new Texture("arena_textures/projectile.png");
 
         font = new BitmapFont();
         font.getData().setScale(3);
@@ -233,6 +233,10 @@ public class ArenaScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             movementHandler.moveRight((arena.getDefender().team == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
         }
+    }
+
+    private void drawHealthBar(PieceInfo piece, float x, float y){
+
     }
 
 }
