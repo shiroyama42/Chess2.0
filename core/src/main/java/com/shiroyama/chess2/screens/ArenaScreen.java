@@ -18,7 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.arena.model.Arena;
-import com.shiroyama.chess2.arena.model.PieceMovementHandler;
+import com.shiroyama.chess2.arena.util.PieceMovementHandler;
 import com.shiroyama.chess2.arena.model.Projectile;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
