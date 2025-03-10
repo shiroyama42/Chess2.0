@@ -3,11 +3,13 @@ package com.shiroyama.chess2.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -23,7 +25,9 @@ import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 public class ArenaScreen implements Screen {
 
@@ -40,6 +44,8 @@ public class ArenaScreen implements Screen {
     private boolean kingDied = false;
     private String gameOverMessage;
     private TextButton menuButton;
+
+    private ShapeRenderer shapeRenderer;
 
     public ArenaScreen(PieceInfo attacker, PieceInfo defender, ChessGame game){
         this.batch = new SpriteBatch();
@@ -60,6 +66,8 @@ public class ArenaScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
         stage = new Stage(new ScreenViewport());
+
+        this.shapeRenderer = new ShapeRenderer();
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -128,6 +136,11 @@ public class ArenaScreen implements Screen {
         }
 
         batch.end();
+
+        drawHealthBar(arena.getAttacker(), arena.getAttacker().getPosition().getX() * 50,
+            (arena.getAttacker().getPosition().getY() + 1) * 50);
+        drawHealthBar(arena.getDefender(), arena.getDefender().getPosition().getX() * 50,
+            (arena.getDefender().getPosition().getY() + 1) * 50);
 
         if (kingDied) {
             stage.act(delta);
@@ -236,7 +249,34 @@ public class ArenaScreen implements Screen {
     }
 
     private void drawHealthBar(PieceInfo piece, float x, float y){
+        float healthPercentage = (float) piece.hp / loadDefaultHp(piece.pieceType);
 
+        float barWidth = 50;
+        float barHeight = 5;
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0.5f, 0.5f, 0.5f, 1);
+        shapeRenderer.rect(x, y, barWidth, barHeight);
+
+        shapeRenderer.setColor(0, 1, 0, 1);
+        shapeRenderer.rect(x, y, barWidth * healthPercentage, barHeight);
+        shapeRenderer.end();
+    }
+
+    private int loadDefaultHp(PieceType pieceType){
+        Properties props =  new Properties();
+        FileHandle file = Gdx.files.internal("stats.cfg");
+
+        try {
+            props.load(file.reader());
+            String pieceTypeName = pieceType.toString();
+
+            return Integer.parseInt(props.getProperty(pieceTypeName + ".hp"));
+
+        }catch (IOException e){
+            Gdx.app.error("PieceInfo", "Error loading stats.cfg: " + e.getMessage());
+            return PieceInfo.getDefaultHp(pieceType);
+        }
     }
 
 }

@@ -29,7 +29,7 @@ public class PieceInfo {
         return ((team == Team.WHITE) ? "white" : "black")+ "-" + pieceType.toString().toLowerCase();
     }
 
-    private int getDefaultHp(PieceType pieceType){
+    public static int getDefaultHp(PieceType pieceType){
         switch (pieceType){
             case PAWN: return 1;
             case KNIGHT: return 10;
