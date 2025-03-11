@@ -137,10 +137,12 @@ public class ArenaScreen implements Screen {
 
         batch.end();
 
-        drawHealthBar(arena.getAttacker(), arena.getAttacker().getPosition().getX() * 50,
-            (arena.getAttacker().getPosition().getY() + 1) * 50);
-        drawHealthBar(arena.getDefender(), arena.getDefender().getPosition().getX() * 50,
-            (arena.getDefender().getPosition().getY() + 1) * 50);
+        if(!kingDied){
+            drawHealthBar(arena.getAttacker(), arena.getAttacker().getPosition().getX() * 50,
+                (arena.getAttacker().getPosition().getY() + 1) * 50);
+            drawHealthBar(arena.getDefender(), arena.getDefender().getPosition().getX() * 50,
+                (arena.getDefender().getPosition().getY() + 1) * 50);
+        }
 
         if (kingDied) {
             stage.act(delta);

@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.shiroyama.chess2.ChessGame;
 
@@ -35,17 +37,19 @@ public class MenuScreen implements Screen {
         // Create the buttons
         TextButton playButton = new TextButton("Local Play", skin);
         TextButton aiButton = new TextButton("VS AI", skin);
+        TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         playButton.getLabel().setFontScale(2);
         aiButton.getLabel().setFontScale(2);
+        settingsButton.getLabel().setFontScale(2);
         exitButton.getLabel().setFontScale(2);
 
         // Add listeners to the buttons
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                chessGame.setScreen(new GameScreen()); // Takes you to GameScreen
+                chessGame.setScreen(new GameScreen());
             }
         });
 
@@ -64,27 +68,38 @@ public class MenuScreen implements Screen {
             }
         });
 
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                chessGame.setScreen(new SettingsScreen(chessGame));
+                dispose();
+            }
+        });
+
         // Create a table to organize the layout
         Table table = new Table();
         table.center();
         table.setFillParent(true);
-        table.add(playButton).fillX().uniformX().pad(10); // Adds "Local Play" button
-        table.row().pad(10);
-        table.add(aiButton).fillX().uniformX().pad(10); // Adds "VS AI" button
-        table.row().pad(10);
-        table.add(exitButton).fillX().uniformX().pad(10); // Adds "Exit" button
 
-        // Add the table to the stage
+        table.add(playButton).fillX().uniformX().pad(10);
+        table.row().pad(10);
+
+        table.add(aiButton).fillX().uniformX().pad(10);
+        table.row().pad(10);
+
+        table.add(settingsButton).fillX().uniformX().pad(10);
+        table.row().pad(10);
+
+        table.add(exitButton).fillX().uniformX().pad(10);
+
         stage.addActor(table);
     }
 
     @Override
     public void render(float v) {
-        // Clear the screen with a color
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Draw the stage (the UI)
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }

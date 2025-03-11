@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.shiroyama.chess2.arena.model.Projectile;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
+import com.shiroyama.chess2.utils.ConfigurationManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -67,20 +68,9 @@ public class PieceInfo {
     }
 
     private void loadStats(PieceType pieceType){
-        Properties props =  new Properties();
-        FileHandle file = Gdx.files.internal("stats.cfg");
 
-        try {
-            props.load(file.reader());
-            String pieceTypeName = pieceType.toString();
-
-            hp = Integer.parseInt(props.getProperty(pieceTypeName + ".hp"));
-            attackRate = Float.parseFloat(props.getProperty(pieceTypeName + ".attackRate"));
-
-        }catch (IOException e){
-            Gdx.app.error("PieceInfo", "Error loading stats.cfg: " + e.getMessage());
-            hp = getDefaultHp(pieceType);
-            attackRate = getDefaultAttackRate(pieceType);
-        }
+        ConfigurationManager configurationManager = ConfigurationManager.getInstance();
+        hp = configurationManager.getHp(pieceType);
+        attackRate = configurationManager.getAttackRate(pieceType);
     }
 }
