@@ -26,6 +26,7 @@ public class SettingsScreen implements Screen {
         this.skin = new Skin(Gdx.files.internal("uiskin.json"));
         this.configurationManager = ConfigurationManager.getInstance();
 
+        createUI();
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -38,9 +39,9 @@ public class SettingsScreen implements Screen {
         mainTable.add(titleLabel).colspan(3).pad(20);
         mainTable.row();
 
-        mainTable.add(new Label("Piece Type", skin, "default-font")).pad(10);
-        mainTable.add(new Label("HP", skin, "default-font")).pad(10);
-        mainTable.add(new Label("Attack Rate", skin, "default-font")).pad(10);
+        mainTable.add(new Label("Piece Type", skin, "default")).pad(10);
+        mainTable.add(new Label("HP", skin, "default")).pad(10);
+        mainTable.add(new Label("Attack Rate", skin, "default")).pad(10);
         mainTable.row();
 
         for (final PieceType pieceType : PieceType.values()) {
@@ -67,11 +68,6 @@ public class SettingsScreen implements Screen {
                         configurationManager.setHp(pieceType, hp);
                         configurationManager.setAttackRate(pieceType, attackRate);
                         configurationManager.saveConfiguration();
-
-                        Dialog dialog = new Dialog("Success", skin);
-                        dialog.text(pieceType + " settings saved!");
-                        dialog.button("OK");
-                        dialog.show(stage);
 
                     } catch (NumberFormatException e) {
                         Dialog dialog = new Dialog("Error", skin);

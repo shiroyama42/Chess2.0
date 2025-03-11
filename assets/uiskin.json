@@ -131,6 +131,10 @@
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
+    "title": {
+      "font": "default-font",
+      "fontColor": "white"
+    },
     "default": {
       "font": "default-font",
       "fontColor": "white"
