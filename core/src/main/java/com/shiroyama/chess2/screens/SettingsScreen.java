@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.shiroyama.chess2.ChessGame;
-import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.utils.ConfigurationManager;
 
@@ -111,22 +110,18 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void resize(int i, int i1) {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override

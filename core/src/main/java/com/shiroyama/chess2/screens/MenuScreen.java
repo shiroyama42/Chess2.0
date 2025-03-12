@@ -31,10 +31,8 @@ public class MenuScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        // Load the Skin (you can customize or add your own skin)
-        skin = new Skin(Gdx.files.internal("uiskin.json")); // make sure to add this skin to your assets folder
+        skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-        // Create the buttons
         TextButton playButton = new TextButton("Local Play", skin);
         TextButton aiButton = new TextButton("VS AI", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
@@ -45,7 +43,6 @@ public class MenuScreen implements Screen {
         settingsButton.getLabel().setFontScale(2);
         exitButton.getLabel().setFontScale(2);
 
-        // Add listeners to the buttons
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -56,7 +53,6 @@ public class MenuScreen implements Screen {
         aiButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // VS AI button does nothing for now
                 System.out.println("VS AI button clicked");
             }
         });
@@ -64,7 +60,7 @@ public class MenuScreen implements Screen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.exit(); // Exit the game
+                Gdx.app.exit();
             }
         });
 
@@ -76,7 +72,6 @@ public class MenuScreen implements Screen {
             }
         });
 
-        // Create a table to organize the layout
         Table table = new Table();
         table.center();
         table.setFillParent(true);
@@ -111,17 +106,14 @@ public class MenuScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override

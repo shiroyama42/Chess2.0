@@ -183,8 +183,8 @@ public class ArenaScreen implements Screen {
 
         if (/*kingDied && */gameOverMessage != null) {
             layout.setText(font, gameOverMessage);
-            float textX = (Gdx.graphics.getWidth() - layout.width) / 2;
-            float textY = Gdx.graphics.getHeight() / 2 + layout.height / 2;
+            float textX = (Gdx.graphics.getWidth() - layout.width) / 2f;
+            float textY = Gdx.graphics.getHeight() / 2f + layout.height / 2f;
             font.draw(batch, gameOverMessage, textX, textY);
         }
 

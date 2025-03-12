@@ -76,31 +76,23 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // Resize your screen here. The parameters represent the new window size.
     }
 
     @Override
     public void pause() {
-        // Invoked when your application is paused.
     }
 
     @Override
     public void resume() {
-        // Invoked when your application is resumed after pause.
     }
 
     @Override
     public void hide() {
-        // This method is called when another screen replaces this one.
     }
 
     @Override
     public void dispose() {
         batch.dispose();
-    }
-
-    public ChessBoard getBoard(){
-        return board;
     }
 
     public void exitArena(PieceInfo winner, PieceInfo loser){
