@@ -52,7 +52,7 @@ public class ArenaScreen implements Screen {
         this.batch = new SpriteBatch();
         this.arena = new Arena(attacker, defender);
         this.game = game;
-        this.movementHandler = new PieceMovementHandler();
+        this.movementHandler = new PieceMovementHandler(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         attackerTexture = new Texture("chess_pieces/" + attacker.getName() + ".png");
         defenderTexture = new Texture("chess_pieces/" + defender.getName() + ".png");
@@ -69,6 +69,17 @@ public class ArenaScreen implements Screen {
         stage = new Stage(new ScreenViewport());
 
         this.shapeRenderer = new ShapeRenderer();
+
+        float screenWidthInUnits = Gdx.graphics.getWidth() / 50f;
+        float screenHeightInUnits = Gdx.graphics.getHeight() / 50f;
+
+        // Set attacker at top middle
+        attacker.getPosition().setX(screenWidthInUnits / 2);
+        attacker.getPosition().setY(screenHeightInUnits - 1.3f);
+
+        // Set defender at bottom middle
+        defender.getPosition().setX(screenWidthInUnits / 2);
+        defender.getPosition().setY(0.5f);
 
         Gdx.input.setInputProcessor(stage);
     }
