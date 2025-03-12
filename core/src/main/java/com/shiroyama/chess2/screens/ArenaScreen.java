@@ -42,6 +42,7 @@ public class ArenaScreen implements Screen {
     private Stage stage;
     private Skin skin;
     private boolean kingDied = false;
+    private boolean combatOver = false;
     private String gameOverMessage;
     private TextButton menuButton;
 
@@ -81,18 +82,23 @@ public class ArenaScreen implements Screen {
         Gdx.gl.glClearColor(254f / 255f, 156f / 255f, 28f / 255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (!kingDied){
+        if (!combatOver){
             arena.update(delta);
+            drawHealthBar(arena.getAttacker(), arena.getAttacker().getPosition().getX() * 50,
+                (arena.getAttacker().getPosition().getY() + 1) * 50);
+            drawHealthBar(arena.getDefender(), arena.getDefender().getPosition().getX() * 50,
+                (arena.getDefender().getPosition().getY() + 1) * 50);
         }
 
         if (!kingDied && arena.isCombatOver()){
-            PieceInfo winner = arena.attackerWon() ? arena.getAttacker() : null;
+            PieceInfo winner = arena.attackerWon() ? arena.getAttacker() : arena.getDefender();
             PieceInfo loser = arena.attackerWon() ? arena.getDefender() : arena.getAttacker();
 
             if(loser.pieceType == PieceType.KING){
                 kingDied = true;
-                String winningTeam = winner.team == Team.WHITE ? "WHITE" : "BLACK";
+                combatOver = true;
 
+                String winningTeam = winner.team == Team.WHITE ? "WHITE" : "BLACK";
                 String losingTeam = loser.team == Team.WHITE ? "WHITE" : "BLACK";
 
                 gameOverMessage = losingTeam + " KING DIED\n" + winningTeam + " TEAM WON!";
@@ -112,11 +118,24 @@ public class ArenaScreen implements Screen {
 
                 stage.addActor(menuButton);
             }else{
-                ((GameScreen) game.getScreen()).exitArena(winner, loser);
-                return;
+                combatOver = true;
+                gameOverMessage = winner.getName(true) + " WON!";
+
+                menuButton = new TextButton("Continue", skin);
+                menuButton.setSize((float) (Gdx.graphics.getWidth() * 0.3), 60);
+                menuButton.setPosition(
+                    (Gdx.graphics.getWidth() - menuButton.getWidth()) / 2,
+                    Gdx.graphics.getHeight() / 4
+                );
+                menuButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent changeEvent, Actor actor) {
+                        ((GameScreen) game.getScreen()).exitArena(winner, loser);
+                    }
+                });
+
+                stage.addActor(menuButton);
             }
-
-
         }
 
         batch.begin();
@@ -128,7 +147,7 @@ public class ArenaScreen implements Screen {
             batch.draw(projectileTexture, projectile.position.getX() * 50, projectile.position.getY() * 50, 10, 10);
         }
 
-        if (kingDied && gameOverMessage != null) {
+        if (/*kingDied && */gameOverMessage != null) {
             layout.setText(font, gameOverMessage);
             float textX = (Gdx.graphics.getWidth() - layout.width) / 2;
             float textY = Gdx.graphics.getHeight() / 2 + layout.height / 2;
@@ -137,14 +156,7 @@ public class ArenaScreen implements Screen {
 
         batch.end();
 
-        if(!kingDied){
-            drawHealthBar(arena.getAttacker(), arena.getAttacker().getPosition().getX() * 50,
-                (arena.getAttacker().getPosition().getY() + 1) * 50);
-            drawHealthBar(arena.getDefender(), arena.getDefender().getPosition().getX() * 50,
-                (arena.getDefender().getPosition().getY() + 1) * 50);
-        }
-
-        if (kingDied) {
+        if (combatOver) {
             stage.act(delta);
             stage.draw();
         } else {

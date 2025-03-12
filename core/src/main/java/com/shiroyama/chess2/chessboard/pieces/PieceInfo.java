@@ -27,7 +27,11 @@ public class PieceInfo {
     }
 
     public String getName(){
-        return ((team == Team.WHITE) ? "white" : "black")+ "-" + pieceType.toString().toLowerCase();
+        return ((team == Team.WHITE) ? "white" : "black") + "-" + pieceType.toString().toLowerCase();
+    }
+
+    public String getName(boolean combarOver){
+        return ((team == Team.WHITE) ? "WHITE" : "BLACK") + " " + pieceType.toString();
     }
 
     public static int getDefaultHp(PieceType pieceType){

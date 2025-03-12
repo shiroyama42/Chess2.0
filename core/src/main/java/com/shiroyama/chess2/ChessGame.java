@@ -12,11 +12,4 @@ public class ChessGame extends Game {
     public void create() {
         setScreen(new MenuScreen(this));
     }
-
-    public void returnToGameScreen(PieceInfo winner, PieceInfo loser){
-        if (winner != null){
-            ((GameScreen) getScreen()).getBoard().movePiece(loser.getPosition(), winner.getPosition());
-        }
-        setScreen(new GameScreen());
-    }
 }
