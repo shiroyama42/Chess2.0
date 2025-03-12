@@ -8,6 +8,7 @@ import com.shiroyama.chess2.chessboard.controller.IntRect;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
+import com.shiroyama.chess2.utils.ScoreBoardManager;
 
 import java.util.HashMap;
 
@@ -25,6 +26,8 @@ public class ChessBoard {
     private TargetPoint whiteKing;
     private TargetPoint blackKing;
 
+    private ScoreBoardManager scoreBoardManager;
+
     public ChessBoard(int size, HashMap<String, Texture> textures) {
         this.size = size;
         squareSize = size / 8;
@@ -35,6 +38,8 @@ public class ChessBoard {
 
         whiteKing = new TargetPoint(3, 7);
         blackKing = new TargetPoint(3, 0);
+
+        this.scoreBoardManager = ScoreBoardManager.getInstance();
     }
 
     private void initializePieces(){
@@ -121,6 +126,8 @@ public class ChessBoard {
             return;
         }
         PieceInfo target = pieces[(int)to.getX()][(int)to.getY()];
+
+        scoreBoardManager.addMoveCount();
 
         if (target != null && attackListener != null){
 

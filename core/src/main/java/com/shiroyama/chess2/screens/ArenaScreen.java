@@ -24,6 +24,7 @@ import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
+import com.shiroyama.chess2.utils.ScoreBoardManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,12 +42,17 @@ public class ArenaScreen implements Screen {
     private GlyphLayout layout;
     private Stage stage;
     private Skin skin;
+
     private boolean kingDied = false;
     private boolean combatOver = false;
+
     private String gameOverMessage;
     private TextButton menuButton;
+    private TextButton scoreButton;
 
     private ShapeRenderer shapeRenderer;
+
+    private ScoreBoardManager scoreBoardManager;
 
     public ArenaScreen(PieceInfo attacker, PieceInfo defender, ChessGame game){
         this.batch = new SpriteBatch();
@@ -69,6 +75,8 @@ public class ArenaScreen implements Screen {
         stage = new Stage(new ScreenViewport());
 
         this.shapeRenderer = new ShapeRenderer();
+
+        this.scoreBoardManager = ScoreBoardManager.getInstance();
 
         float screenWidthInUnits = Gdx.graphics.getWidth() / 50f;
         float screenHeightInUnits = Gdx.graphics.getHeight() / 50f;
@@ -103,6 +111,8 @@ public class ArenaScreen implements Screen {
             PieceInfo winner = arena.attackerWon() ? arena.getAttacker() : arena.getDefender();
             PieceInfo loser = arena.attackerWon() ? arena.getDefender() : arena.getAttacker();
 
+            scoreBoardManager.recordCapture(loser, winner.team);
+
             if(loser.pieceType == PieceType.KING){
                 kingDied = true;
                 combatOver = true;
@@ -116,7 +126,7 @@ public class ArenaScreen implements Screen {
                 menuButton.setSize((float) (Gdx.graphics.getWidth() * 0.3), 60);
                 menuButton.setPosition(
                     (Gdx.graphics.getWidth() - menuButton.getWidth()) / 2,
-                    Gdx.graphics.getHeight() / 4
+                    Gdx.graphics.getHeight() / 4f
                 );
                 menuButton.addListener(new ChangeListener() {
                     @Override
@@ -125,7 +135,22 @@ public class ArenaScreen implements Screen {
                     }
                 });
 
+                scoreButton = new TextButton("Scoreboard", skin);
+                scoreButton.setSize((float) (Gdx.graphics.getWidth() * 0.3), 60);
+                scoreButton.setPosition(
+                    (Gdx.graphics.getWidth() - scoreButton.getWidth()) / 2,
+                    Gdx.graphics.getHeight() / 10f
+                );
+                scoreButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent changeEvent, Actor actor) {
+                        game.setScreen(new ScoreBoardScreen(game));
+                    }
+                });
+
                 stage.addActor(menuButton);
+                stage.addActor(scoreButton);
+
             }else{
                 combatOver = true;
                 gameOverMessage = winner.getName(true) + " WON!";
@@ -134,7 +159,7 @@ public class ArenaScreen implements Screen {
                 menuButton.setSize((float) (Gdx.graphics.getWidth() * 0.3), 60);
                 menuButton.setPosition(
                     (Gdx.graphics.getWidth() - menuButton.getWidth()) / 2,
-                    Gdx.graphics.getHeight() / 4
+                    Gdx.graphics.getHeight() / 4f
                 );
                 menuButton.addListener(new ChangeListener() {
                     @Override
