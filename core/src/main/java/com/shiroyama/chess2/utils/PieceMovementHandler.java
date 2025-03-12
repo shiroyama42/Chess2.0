@@ -1,4 +1,4 @@
-package com.shiroyama.chess2.arena.util;
+package com.shiroyama.chess2.utils;
 
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 

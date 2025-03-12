@@ -17,9 +17,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.shiroyama.chess2.ChessGame;
-import com.shiroyama.chess2.arena.model.Arena;
-import com.shiroyama.chess2.arena.util.PieceMovementHandler;
-import com.shiroyama.chess2.arena.model.Projectile;
+import com.shiroyama.chess2.arena.Arena;
+import com.shiroyama.chess2.utils.PieceMovementHandler;
+import com.shiroyama.chess2.arena.Projectile;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
@@ -73,11 +73,9 @@ public class ArenaScreen implements Screen {
         float screenWidthInUnits = Gdx.graphics.getWidth() / 50f;
         float screenHeightInUnits = Gdx.graphics.getHeight() / 50f;
 
-        // Set attacker at top middle
         attacker.getPosition().setX(screenWidthInUnits / 2);
         attacker.getPosition().setY(screenHeightInUnits - 1.3f);
 
-        // Set defender at bottom middle
         defender.getPosition().setX(screenWidthInUnits / 2);
         defender.getPosition().setY(0.5f);
 
@@ -177,22 +175,18 @@ public class ArenaScreen implements Screen {
 
     @Override
     public void resize(int i, int i1) {
-
     }
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override
@@ -303,5 +297,4 @@ public class ArenaScreen implements Screen {
             return PieceInfo.getDefaultHp(pieceType);
         }
     }
-
 }

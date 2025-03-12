@@ -1,4 +1,4 @@
-package com.shiroyama.chess2.arena.model;
+package com.shiroyama.chess2.arena;
 
 import com.badlogic.gdx.math.Vector2;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;

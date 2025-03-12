@@ -1,14 +1,10 @@
 package com.shiroyama.chess2.chessboard.pieces;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.shiroyama.chess2.arena.model.Projectile;
+import com.shiroyama.chess2.arena.Projectile;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.utils.ConfigurationManager;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 
 public class PieceInfo {
 
