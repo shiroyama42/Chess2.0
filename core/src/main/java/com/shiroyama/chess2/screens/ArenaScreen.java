@@ -45,6 +45,7 @@ public class ArenaScreen implements Screen {
 
     private boolean kingDied = false;
     private boolean combatOver = false;
+    private boolean scoreAdded = false;
 
     private String gameOverMessage;
     private TextButton menuButton;
@@ -111,8 +112,6 @@ public class ArenaScreen implements Screen {
             PieceInfo winner = arena.attackerWon() ? arena.getAttacker() : arena.getDefender();
             PieceInfo loser = arena.attackerWon() ? arena.getDefender() : arena.getAttacker();
 
-            scoreBoardManager.recordCapture(loser, winner.team);
-
             if(loser.pieceType == PieceType.KING){
                 kingDied = true;
                 combatOver = true;
@@ -148,6 +147,11 @@ public class ArenaScreen implements Screen {
                     }
                 });
 
+                if (!scoreAdded){
+                    scoreBoardManager.recordCapture(loser, winner.team);
+                    scoreAdded = true;
+                }
+
                 stage.addActor(menuButton);
                 stage.addActor(scoreButton);
 
@@ -167,6 +171,11 @@ public class ArenaScreen implements Screen {
                         ((GameScreen) game.getScreen()).exitArena(winner, loser);
                     }
                 });
+
+                if (!scoreAdded){
+                    scoreBoardManager.recordCapture(loser, winner.team);
+                    scoreAdded = true;
+                }
 
                 stage.addActor(menuButton);
             }
