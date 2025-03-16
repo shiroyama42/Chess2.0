@@ -12,6 +12,7 @@ public class Arena {
     private PieceInfo attacker;
     private PieceInfo defender;
     private List<Projectile> projectiles;
+    private boolean combatStarted = false;
 
     private float attackerTimeSinceLastShot;
     private float defenderTimeSinceLastShot;
@@ -25,6 +26,9 @@ public class Arena {
     }
 
     public void update(float deltaTime){
+
+        if (!combatStarted) return;
+
         attackerTimeSinceLastShot += deltaTime;
         defenderTimeSinceLastShot += deltaTime;
 
@@ -56,6 +60,10 @@ public class Arena {
                 iterator.remove();
             }
         }
+    }
+
+    public void startCombat(){
+        combatStarted = true;
     }
 
     public boolean isCombatOver(){

@@ -55,6 +55,9 @@ public class ArenaScreen implements Screen {
 
     private ScoreBoardManager scoreBoardManager;
 
+    private boolean combatStarted = false;
+    private float countdownTimer = 3f;
+
     public ArenaScreen(PieceInfo attacker, PieceInfo defender, ChessGame game){
         this.batch = new SpriteBatch();
         this.arena = new Arena(attacker, defender);
@@ -185,6 +188,17 @@ public class ArenaScreen implements Screen {
         drawPiece(attackerTexture, arena.getAttacker().getPosition(), arena.getDefender().getPosition(), gunTexture);
         drawPiece(defenderTexture, arena.getDefender().getPosition(), arena.getAttacker().getPosition(), gunTexture);
 
+        if (!combatStarted){
+            countdownTimer -= delta;
+            if (countdownTimer <= 0){
+                combatStarted = true;
+                arena.startCombat();
+                gameOverMessage = null;
+            }else{
+                gameOverMessage = String.format("%.1f", countdownTimer);
+            }
+        }
+
         List<Projectile> projectiles = arena.getProjectiles();
         for (Projectile projectile : projectiles){
             batch.draw(projectileTexture, projectile.position.getX() * 50, projectile.position.getY() * 50, 10, 10);
@@ -203,7 +217,9 @@ public class ArenaScreen implements Screen {
             stage.act(delta);
             stage.draw();
         } else {
-            handleMovement();
+            if (combatStarted){
+                handleMovement();
+            }
         }
     }
 
