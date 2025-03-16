@@ -39,9 +39,7 @@ public class Projectile {
 
         float pieceSize = 50f;
 
-        return piece.team != shooterTeam
-            //&& Math.abs(position.getX() - piece.getPosition().getX()) <= 1
-            //&& Math.abs(position.getY() - piece.getPosition().getY()) <= 1;
+        return piece.getTeam() != shooterTeam
             && projectileX < pieceX + pieceSize
             && projectileX + PROJECTILE_SIZE > pieceX
             && projectileY < pieceY + pieceSize

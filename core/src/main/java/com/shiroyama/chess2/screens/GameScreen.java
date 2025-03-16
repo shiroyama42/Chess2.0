@@ -10,6 +10,7 @@ import com.shiroyama.chess2.chessboard.model.ChessBoard;
 import com.shiroyama.chess2.chessboard.controller.GameState;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
+import com.shiroyama.chess2.chessboard.pieces.Team;
 import com.shiroyama.chess2.utils.TextureLoader;
 
 import java.util.HashMap;
@@ -104,6 +105,16 @@ public class GameScreen implements Screen {
             board.pieces[(int)originalAttackerPosition.getX()][(int)originalAttackerPosition.getY()] = null;
             board.pieces[(int)originalDefenderPosition.getX()][(int)originalDefenderPosition.getY()] = winner;
             winner.setPosition(originalDefenderPosition);
+
+            if (winner.getTeam() == Team.WHITE && winner.getPosition().getY() == 0){
+                //TODO DIALOG
+                System.out.println("hihi");
+            }
+
+            if (winner.getTeam() == Team.BLACK && winner.getPosition().getY() == 7){
+                //TODO DIALOG
+                System.out.println("haha");
+            }
         }
 
         Gdx.input.setInputProcessor(gameState);

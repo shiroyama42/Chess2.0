@@ -110,7 +110,7 @@ public class GameState implements InputProcessor {
 
         if (!moved) {
             PieceInfo piece = board.getPiece(tileIdx);
-            if (piece != null && piece.team == currentTurn) {
+            if (piece != null && piece.getTeam() == currentTurn) {
                 selected = tileIdx;
                 Rules.GetValidMoves(validMoves, tileIdx, piece, board);
             }

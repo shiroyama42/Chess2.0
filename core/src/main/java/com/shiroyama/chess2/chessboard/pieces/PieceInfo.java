@@ -8,11 +8,11 @@ import java.util.List;
 
 public class PieceInfo {
 
-    public Team team;
-    public PieceType pieceType;
-    public int hp;
-    public float attackRate;
-    public TargetPoint position;
+    private Team team;
+    private PieceType pieceType;
+    private int hp;
+    private float attackRate;
+    private TargetPoint position;
 
     public PieceInfo(Team team, PieceType pieceType, TargetPoint position) {
         super();
@@ -26,7 +26,7 @@ public class PieceInfo {
         return ((team == Team.WHITE) ? "white" : "black") + "-" + pieceType.toString().toLowerCase();
     }
 
-    public String getName(boolean combarOver){
+    public String getName(boolean combatOver){
         return ((team == Team.WHITE) ? "WHITE" : "BLACK") + " " + pieceType.toString();
     }
 
@@ -70,7 +70,39 @@ public class PieceInfo {
     private void loadStats(PieceType pieceType){
 
         ConfigurationManager configurationManager = ConfigurationManager.getInstance();
-        hp = configurationManager.getHp(pieceType);
-        attackRate = configurationManager.getAttackRate(pieceType);
+        this.hp = configurationManager.getHp(pieceType);
+        this.attackRate = configurationManager.getAttackRate(pieceType);
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public PieceType getPieceType() {
+        return pieceType;
+    }
+
+    public void setPieceType(PieceType pieceType) {
+        this.pieceType = pieceType;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public float getAttackRate() {
+        return attackRate;
+    }
+
+    public void setAttackRate(float attackRate) {
+        this.attackRate = attackRate;
     }
 }

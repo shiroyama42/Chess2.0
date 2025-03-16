@@ -32,12 +32,12 @@ public class Arena {
         attackerTimeSinceLastShot += deltaTime;
         defenderTimeSinceLastShot += deltaTime;
 
-        if (attackerTimeSinceLastShot >= 1f / attacker.attackRate){
+        if (attackerTimeSinceLastShot >= 1f / attacker.getAttackRate()){
             attacker.shoot(defender.getPosition(), projectiles);
             attackerTimeSinceLastShot = 0f;
         }
 
-        if (defenderTimeSinceLastShot >= 1f / defender.attackRate){
+        if (defenderTimeSinceLastShot >= 1f / defender.getAttackRate()){
             defender.shoot(attacker.getPosition(), projectiles);
             defenderTimeSinceLastShot = 0f;
         }
@@ -48,10 +48,10 @@ public class Arena {
             projectile.update(deltaTime);
 
             if (projectile.hit(attacker)){
-                attacker.hp -= 1;
+                attacker.setHp(attacker.getHp() - 1);
                 iterator.remove();
             } else if (projectile.hit(defender)) {
-                defender.hp -= 1;
+                defender.setHp(defender.getHp() -1);
                 iterator.remove();
             }
 
@@ -67,11 +67,11 @@ public class Arena {
     }
 
     public boolean isCombatOver(){
-        return attacker.hp <= 0 || defender.hp <= 0;
+        return attacker.getHp() <= 0 || defender.getHp() <= 0;
     }
 
     public boolean attackerWon(){
-        return defender.hp <= 0;
+        return defender.getHp() <= 0;
     }
 
     public List<Projectile> getProjectiles(){

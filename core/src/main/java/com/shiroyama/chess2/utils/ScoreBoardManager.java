@@ -44,7 +44,7 @@ public class ScoreBoardManager {
     public void recordCapture(PieceInfo capturedPiece, Team capturingTeam){
         if (capturedPiece != null){
             Map<PieceType, Integer> teamCaptures = capturedPieces.get(capturingTeam);
-            PieceType pieceType = capturedPiece.pieceType;
+            PieceType pieceType = capturedPiece.getPieceType();
             teamCaptures.put(pieceType, teamCaptures.get(pieceType) + 1);
         }
     }

@@ -115,12 +115,12 @@ public class ArenaScreen implements Screen {
             PieceInfo winner = arena.attackerWon() ? arena.getAttacker() : arena.getDefender();
             PieceInfo loser = arena.attackerWon() ? arena.getDefender() : arena.getAttacker();
 
-            if(loser.pieceType == PieceType.KING){
+            if(loser.getPieceType() == PieceType.KING){
                 kingDied = true;
                 combatOver = true;
 
-                String winningTeam = winner.team == Team.WHITE ? "WHITE" : "BLACK";
-                String losingTeam = loser.team == Team.WHITE ? "WHITE" : "BLACK";
+                String winningTeam = winner.getTeam() == Team.WHITE ? "WHITE" : "BLACK";
+                String losingTeam = loser.getTeam() == Team.WHITE ? "WHITE" : "BLACK";
 
                 gameOverMessage = losingTeam + " KING DIED\n" + winningTeam + " TEAM WON!";
 
@@ -151,7 +151,7 @@ public class ArenaScreen implements Screen {
                 });
 
                 if (!scoreAdded){
-                    scoreBoardManager.recordCapture(loser, winner.team);
+                    scoreBoardManager.recordCapture(loser, winner.getTeam());
                     scoreAdded = true;
                 }
 
@@ -176,7 +176,7 @@ public class ArenaScreen implements Screen {
                 });
 
                 if (!scoreAdded){
-                    scoreBoardManager.recordCapture(loser, winner.team);
+                    scoreBoardManager.recordCapture(loser, winner.getTeam());
                     scoreAdded = true;
                 }
 
@@ -291,34 +291,34 @@ public class ArenaScreen implements Screen {
 
     private void handleMovement() {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            movementHandler.moveUp((arena.getAttacker().team == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
+            movementHandler.moveUp((arena.getAttacker().getTeam() == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            movementHandler.moveDown((arena.getAttacker().team == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
+            movementHandler.moveDown((arena.getAttacker().getTeam() == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            movementHandler.moveLeft((arena.getAttacker().team == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
+            movementHandler.moveLeft((arena.getAttacker().getTeam() == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            movementHandler.moveRight((arena.getAttacker().team == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
+            movementHandler.moveRight((arena.getAttacker().getTeam() == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            movementHandler.moveUp((arena.getDefender().team == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
+            movementHandler.moveUp((arena.getDefender().getTeam() == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            movementHandler.moveDown((arena.getDefender().team == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
+            movementHandler.moveDown((arena.getDefender().getTeam() == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            movementHandler.moveLeft((arena.getDefender().team == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
+            movementHandler.moveLeft((arena.getDefender().getTeam() == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            movementHandler.moveRight((arena.getDefender().team == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
+            movementHandler.moveRight((arena.getDefender().getTeam() == Team.BLACK) ? arena.getDefender() : arena.getAttacker());
         }
     }
 
     private void drawHealthBar(PieceInfo piece, float x, float y){
-        float healthPercentage = (float) piece.hp / loadDefaultHp(piece.pieceType);
+        float healthPercentage = (float) piece.getHp() / loadDefaultHp(piece.getPieceType());
 
         float barWidth = 50;
         float barHeight = 5;

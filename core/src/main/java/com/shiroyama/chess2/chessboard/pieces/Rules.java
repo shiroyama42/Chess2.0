@@ -10,24 +10,24 @@ public class Rules {
     public Rules() {}
 
     public static void GetValidMoves(ArrayList<TargetPoint> list, TargetPoint selection, PieceInfo piece, ChessBoard board){
-        switch (piece.pieceType){
+        switch (piece.getPieceType()){
             case PAWN:
-                getValidMovesPawn(list, selection, piece.team, board);
+                getValidMovesPawn(list, selection, piece.getTeam(), board);
                 break;
             case BISHOP:
-                getValidMovesBishop(list, selection, piece.team, board);
+                getValidMovesBishop(list, selection, piece.getTeam(), board);
                 break;
             case ROOK:
-                getValidMovesRook(list, selection, piece.team, board);
+                getValidMovesRook(list, selection, piece.getTeam(), board);
                 break;
             case KNIGHT:
-                getValidMovesKnight(list, selection, piece.team, board);
+                getValidMovesKnight(list, selection, piece.getTeam(), board);
                 break;
             case QUEEN:
-                getValidMovesQueen(list, selection, piece.team, board);
+                getValidMovesQueen(list, selection, piece.getTeam(), board);
                 break;
             case KING:
-                getValidMovesKing(list, selection, piece.team, board);
+                getValidMovesKing(list, selection, piece.getTeam(), board);
                 break;
         }
     }
@@ -50,7 +50,7 @@ public class Rules {
         for(int i = -1; i <= 1; i += 2){
             TargetPoint captureMove = selection.Transpose(i, direction);
             PieceInfo target = board.getPiece(captureMove);
-            if(board.isInBounds(captureMove) && target != null && target.team != team){
+            if(board.isInBounds(captureMove) && target != null && target.getTeam() != team){
                 list.add(captureMove);
             }
         }
@@ -67,7 +67,7 @@ public class Rules {
                     }
                     PieceInfo target = board.getPiece(move);
                     if (target != null){
-                        if (target.team != team){
+                        if (target.getTeam() != team){
                             list.add(move);
                         }
                         break;
@@ -95,7 +95,7 @@ public class Rules {
                     }
                     PieceInfo target = board.getPiece(move);
                     if (target != null){
-                        if (target.team != team){
+                        if (target.getTeam() != team){
                             list.add(move);
                         }
                         break;
@@ -120,7 +120,7 @@ public class Rules {
 
                     PieceInfo target = board.getPiece(move);
                     if (board.isInBounds(move)){
-                        if (target == null || target.team != team){
+                        if (target == null || target.getTeam() != team){
                             list.add(move);
                         }
                     }
@@ -145,7 +145,7 @@ public class Rules {
 
                     PieceInfo target = board.getPiece(move);
                     if (target != null){
-                        if (target.team != team){
+                        if (target.getTeam() != team){
                             list.add(move);
                         }
                         break;
@@ -166,7 +166,7 @@ public class Rules {
                 TargetPoint move = selection.Transpose(xDir, yDir);
                 PieceInfo target = board.getPiece(move);
                 if (board.isInBounds(move)){
-                    if (target == null || target.team != team){
+                    if (target == null || target.getTeam() != team){
                         list.add(move);
                     }
                 }
