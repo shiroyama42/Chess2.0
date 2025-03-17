@@ -66,10 +66,9 @@ public class GameScreen implements Screen {
             Gdx.input.setInputProcessor(stage);
 
             Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-            PromotionDialog promotionDialog = new PromotionDialog("Choose promotion", skin, "dialog");
-            promotionDialog.text("Select a piece to promote your pawn to:");
+            PromotionDialog promotionDialog = new PromotionDialog("", skin, "dialog", piece.getTeam());
 
-            promotionDialog.button("Queen").button("Rook").button("Bishop").button("Knight").show(stage);
+            promotionDialog/*.button("Queen").button("Rook").button("Bishop").button("Knight")*/.show(stage);
 
 
         });
