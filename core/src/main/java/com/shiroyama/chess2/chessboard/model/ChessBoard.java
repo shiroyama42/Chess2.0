@@ -143,6 +143,16 @@ public class ChessBoard {
             pieces[(int)to.getX()][(int)to.getY()].setPosition(to);
             pieces[(int)from.getX()][(int)from.getY()] = null;
             System.out.println("moved to: " + to.getX() + "-" + to.getY());
+
+            if (piece.getPieceType() == PieceType.PAWN && piece.getTeam() == Team.WHITE && piece.getPosition().getY() == 0){
+                promotionListener.onPromote(piece);
+                System.out.println("btuh");
+            }
+
+            if (piece.getPieceType() == PieceType.PAWN && piece.getTeam() == Team.BLACK && piece.getPosition().getY() == 7){
+                promotionListener.onPromote(piece);
+                System.out.println("bruh");
+            }
         }
     }
 
@@ -171,6 +181,24 @@ public class ChessBoard {
     private void onAttack(PieceInfo attacker, PieceInfo defender){
         if (attackListener != null){
             attackListener.onAttack(attacker, defender);
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public interface promotionListener{
+        void onPromote(PieceInfo piece);
+    }
+
+    private promotionListener promotionListener;
+
+    public void setPromotionListener(promotionListener listener){
+        this.promotionListener = listener;
+    }
+
+    private void onPromote(PieceInfo piece){
+        if (promotionListener != null){
+            promotionListener.onPromote(piece);
         }
     }
 }

@@ -5,11 +5,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.chessboard.model.ChessBoard;
 import com.shiroyama.chess2.chessboard.controller.GameState;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
+import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
 import com.shiroyama.chess2.utils.TextureLoader;
 
@@ -28,6 +32,10 @@ public class GameScreen implements Screen {
     private ArenaScreen arenaScreen;
 
     private TargetPoint originalAttackerPosition, originalDefenderPosition;
+
+    private Stage stage;
+    private boolean showingDialog = false;
+    private PieceInfo promotingPiece;
 
     public GameScreen(){
         this.game = (ChessGame) Gdx.app.getApplicationListener();
@@ -49,6 +57,23 @@ public class GameScreen implements Screen {
 
         gameState = new GameState(size, board, centerX, centerY);
 
+        stage = new Stage(new ScreenViewport());
+
+        board.setPromotionListener((piece) -> {
+
+            showingDialog = true;
+            promotingPiece = piece;
+            Gdx.input.setInputProcessor(stage);
+
+            Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+            PromotionDialog promotionDialog = new PromotionDialog("Choose promotion", skin, "dialog");
+            promotionDialog.text("Select a piece to promote your pawn to:");
+
+            promotionDialog.button("Queen").button("Rook").button("Bishop").button("Knight").show(stage);
+
+
+        });
+
         board.setOnAttackListener((attacker, defender) -> {
             originalAttackerPosition = new TargetPoint(attacker.getPosition().getX(), attacker.getPosition().getY());
             originalDefenderPosition = new TargetPoint(defender.getPosition().getX(), defender.getPosition().getY());
@@ -56,6 +81,8 @@ public class GameScreen implements Screen {
             isInArena = true;
             arenaScreen = new ArenaScreen(attacker, defender, game);
         });
+
+
 
         Gdx.input.setInputProcessor(gameState);
     }
@@ -71,8 +98,14 @@ public class GameScreen implements Screen {
         }else{
             board.draw(batch, centerX, centerY);
             gameState.draw(batch);
+
+            if (showingDialog && stage != null){
+                stage.act(delta);
+                stage.draw();
+            }
         }
         batch.end();
+
     }
 
     @Override
@@ -105,16 +138,6 @@ public class GameScreen implements Screen {
             board.pieces[(int)originalAttackerPosition.getX()][(int)originalAttackerPosition.getY()] = null;
             board.pieces[(int)originalDefenderPosition.getX()][(int)originalDefenderPosition.getY()] = winner;
             winner.setPosition(originalDefenderPosition);
-
-            if (winner.getTeam() == Team.WHITE && winner.getPosition().getY() == 0){
-                //TODO DIALOG
-                System.out.println("hihi");
-            }
-
-            if (winner.getTeam() == Team.BLACK && winner.getPosition().getY() == 7){
-                //TODO DIALOG
-                System.out.println("haha");
-            }
         }
 
         Gdx.input.setInputProcessor(gameState);
