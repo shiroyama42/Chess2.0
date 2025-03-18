@@ -86,7 +86,7 @@ public class GameState implements InputProcessor {
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
-        if (button != 0) {
+        if (button != 0 && board.isPromoting()) {
             return false;
         }
 

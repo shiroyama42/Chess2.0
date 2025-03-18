@@ -22,9 +22,13 @@ public class PromotionDialog extends Dialog {
         TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texture));
 
         ImageButton queenButton = new ImageButton(createDrawable(team, PieceType.QUEEN));
+        queenButton.setName("queen");
         ImageButton rookButton = new ImageButton(createDrawable(team, PieceType.ROOK));
+        rookButton.setName("rook");
         ImageButton knightButton = new ImageButton(createDrawable(team, PieceType.KNIGHT));
+        knightButton.setName("knight");
         ImageButton bishopButton = new ImageButton(createDrawable(team, PieceType.BISHOP));
+        bishopButton.setName("bishop");
 
         button(queenButton);
         button(rookButton);

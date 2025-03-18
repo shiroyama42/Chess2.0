@@ -3,10 +3,14 @@ package com.shiroyama.chess2.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.chessboard.model.ChessBoard;
@@ -37,6 +41,8 @@ public class GameScreen implements Screen {
     private boolean showingDialog = false;
     private PieceInfo promotingPiece;
 
+    private PieceInfo attackerPiece;
+
     public GameScreen(){
         this.game = (ChessGame) Gdx.app.getApplicationListener();
     }
@@ -66,9 +72,26 @@ public class GameScreen implements Screen {
             Gdx.input.setInputProcessor(stage);
 
             Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-            PromotionDialog promotionDialog = new PromotionDialog("", skin, "dialog", piece.getTeam());
+            PromotionDialog promotionDialog = new PromotionDialog("", skin, "dialog", promotingPiece.getTeam());
 
-            promotionDialog/*.button("Queen").button("Rook").button("Bishop").button("Knight")*/.show(stage);
+            promotionDialog.show(stage);
+            board.setPromoting(true);
+
+            stage.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    if (actor instanceof ImageButton && showingDialog){
+                        PieceType newType = determinePieceTypeFromButton(actor);
+                        if (newType != null){
+                            promotingPiece.setPieceType(newType);
+                            showingDialog = false;
+                            board.setPromoting(false);
+
+                            Gdx.input.setInputProcessor(gameState);
+                        }
+                    }
+                }
+            });
 
 
         });
@@ -76,6 +99,8 @@ public class GameScreen implements Screen {
         board.setOnAttackListener((attacker, defender) -> {
             originalAttackerPosition = new TargetPoint(attacker.getPosition().getX(), attacker.getPosition().getY());
             originalDefenderPosition = new TargetPoint(defender.getPosition().getX(), defender.getPosition().getY());
+
+            attackerPiece = attacker;
 
             isInArena = true;
             arenaScreen = new ArenaScreen(attacker, defender, game);
@@ -137,8 +162,61 @@ public class GameScreen implements Screen {
             board.pieces[(int)originalAttackerPosition.getX()][(int)originalAttackerPosition.getY()] = null;
             board.pieces[(int)originalDefenderPosition.getX()][(int)originalDefenderPosition.getY()] = winner;
             winner.setPosition(originalDefenderPosition);
+
+            if (attackerPiece == winner &&
+                ((winner.getTeam() == Team.WHITE && winner.getPosition().getY() == 0 && winner.getPieceType() == PieceType.PAWN)
+                || (winner.getTeam() == Team.BLACK && winner.getPosition().getY() == 7 && winner.getPieceType() == PieceType.PAWN))){
+
+                showingDialog = true;
+                promotingPiece = winner;
+
+                Gdx.input.setInputProcessor(stage);
+
+                Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+                PromotionDialog promotionDialog = new PromotionDialog("", skin, "dialog", promotingPiece.getTeam());
+
+                promotionDialog.show(stage);
+
+                board.setPromoting(true);
+
+                stage.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent changeEvent, Actor actor) {
+                        if (actor instanceof ImageButton && showingDialog){
+                            PieceType newType = determinePieceTypeFromButton(actor);
+                            if (newType != null){
+                                promotingPiece.setPieceType(newType);
+                                showingDialog = false;
+                                board.setPromoting(false);
+
+                                Gdx.input.setInputProcessor(gameState);
+                            }
+                        }
+                    }
+                });
+
+            }
         }
 
-        Gdx.input.setInputProcessor(gameState);
+        if (!showingDialog){
+            Gdx.input.setInputProcessor(gameState);
+        }
+    }
+
+    private PieceType determinePieceTypeFromButton(Actor actor) {
+        if (actor instanceof ImageButton) {
+            String name = ((ImageButton) actor).getName();
+            switch (name) {
+                case "queen":
+                    return PieceType.QUEEN;
+                case "rook":
+                    return PieceType.ROOK;
+                case "knight":
+                    return PieceType.KNIGHT;
+                case "bishop":
+                    return PieceType.BISHOP;
+            }
+        }
+        return null;
     }
 }

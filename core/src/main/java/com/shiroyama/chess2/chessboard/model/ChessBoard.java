@@ -8,6 +8,8 @@ import com.shiroyama.chess2.chessboard.controller.IntRect;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
+import com.shiroyama.chess2.chessboard.utils.AttackListener;
+import com.shiroyama.chess2.chessboard.utils.PromotionListener;
 import com.shiroyama.chess2.utils.ScoreBoardManager;
 
 import java.util.HashMap;
@@ -27,6 +29,8 @@ public class ChessBoard {
     private TargetPoint blackKing;
 
     private ScoreBoardManager scoreBoardManager;
+
+    private boolean isPromoting = false;
 
     public ChessBoard(int size, HashMap<String, Texture> textures) {
         this.size = size;
@@ -146,12 +150,10 @@ public class ChessBoard {
 
             if (piece.getPieceType() == PieceType.PAWN && piece.getTeam() == Team.WHITE && piece.getPosition().getY() == 0){
                 promotionListener.onPromote(piece);
-                System.out.println("btuh");
             }
 
             if (piece.getPieceType() == PieceType.PAWN && piece.getTeam() == Team.BLACK && piece.getPosition().getY() == 7){
                 promotionListener.onPromote(piece);
-                System.out.println("bruh");
             }
         }
     }
@@ -168,37 +170,23 @@ public class ChessBoard {
         return new IntRect((int)point.getX()*squareSize, (int)point.getY() * squareSize, squareSize, squareSize);
     }
 
-    public interface onAttackListener{
-        void onAttack(PieceInfo attacker, PieceInfo defender);
-    }
+    private AttackListener attackListener;
 
-    private onAttackListener attackListener;
-
-    public void setOnAttackListener(onAttackListener listener){
+    public void setOnAttackListener(AttackListener listener){
         this.attackListener = listener;
     }
 
-    private void onAttack(PieceInfo attacker, PieceInfo defender){
-        if (attackListener != null){
-            attackListener.onAttack(attacker, defender);
-        }
-    }
+    private PromotionListener promotionListener;
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public interface promotionListener{
-        void onPromote(PieceInfo piece);
-    }
-
-    private promotionListener promotionListener;
-
-    public void setPromotionListener(promotionListener listener){
+    public void setPromotionListener(PromotionListener listener){
         this.promotionListener = listener;
     }
 
-    private void onPromote(PieceInfo piece){
-        if (promotionListener != null){
-            promotionListener.onPromote(piece);
-        }
+    public boolean isPromoting() {
+        return isPromoting;
+    }
+
+    public void setPromoting(boolean promoting) {
+        isPromoting = promoting;
     }
 }

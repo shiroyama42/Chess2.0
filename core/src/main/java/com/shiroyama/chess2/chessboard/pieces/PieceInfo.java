@@ -1,5 +1,7 @@
 package com.shiroyama.chess2.chessboard.pieces;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.shiroyama.chess2.arena.Projectile;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.utils.ConfigurationManager;
