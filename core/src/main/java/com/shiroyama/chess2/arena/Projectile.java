@@ -7,10 +7,10 @@ import com.shiroyama.chess2.chessboard.pieces.Team;
 
 public class Projectile {
 
-    public Team shooterTeam;
-    public TargetPoint position;
-    public TargetPoint velicoty;
-    public static final float PROJECTILE_SIZE = 10;
+    private Team shooterTeam;
+    private TargetPoint position;
+    private TargetPoint velicoty;
+    private static final float PROJECTILE_SIZE = 10;
 
     public Projectile(Team shooterTeam, TargetPoint startPosition, TargetPoint targetPosition){
         this.shooterTeam = shooterTeam;
@@ -51,5 +51,29 @@ public class Projectile {
         float dy = target.getY() - start.getY();
         double length = Math.sqrt(dx * dx + dy * dy);
         return new TargetPoint((float) (dx / length * 5), (float) (dy / length * 5));
+    }
+
+    public Team getShooterTeam() {
+        return shooterTeam;
+    }
+
+    public void setShooterTeam(Team shooterTeam) {
+        this.shooterTeam = shooterTeam;
+    }
+
+    public TargetPoint getPosition() {
+        return position;
+    }
+
+    public void setPosition(TargetPoint position) {
+        this.position = position;
+    }
+
+    public TargetPoint getVelicoty() {
+        return velicoty;
+    }
+
+    public void setVelicoty(TargetPoint velicoty) {
+        this.velicoty = velicoty;
     }
 }

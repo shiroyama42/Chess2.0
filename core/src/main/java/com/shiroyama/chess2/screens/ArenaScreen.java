@@ -201,7 +201,7 @@ public class ArenaScreen implements Screen {
 
         List<Projectile> projectiles = arena.getProjectiles();
         for (Projectile projectile : projectiles){
-            batch.draw(projectileTexture, projectile.position.getX() * 50, projectile.position.getY() * 50, 10, 10);
+            batch.draw(projectileTexture, projectile.getPosition().getX() * 50, projectile.getPosition().getY() * 50, 10, 10);
         }
 
         if (/*kingDied && */gameOverMessage != null) {
