@@ -111,10 +111,6 @@ public class ChessBoard {
         }
     }
 
-    public TargetPoint getKing(Team team){
-        return (team == Team.WHITE) ? whiteKing : blackKing;
-    }
-
     public PieceInfo getPiece(TargetPoint location){
         if(!isInBounds(location)){
             return null;
@@ -159,7 +155,7 @@ public class ChessBoard {
     }
 
     public TargetPoint getPoint(int x, int y){
-        return new TargetPoint(x / squareSize, 7-y/squareSize);
+        return new TargetPoint((float) x / squareSize, 7- (float) y /squareSize);
     }
 
     public boolean isInBounds(TargetPoint location){

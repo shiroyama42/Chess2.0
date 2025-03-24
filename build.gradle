@@ -75,6 +75,10 @@ subprojects {
 
     testImplementation 'org.mockito:mockito-core:4.0.0'
 
+    testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+
+
   }
 
   test {
