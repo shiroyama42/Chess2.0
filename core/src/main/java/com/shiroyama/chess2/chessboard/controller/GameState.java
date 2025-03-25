@@ -14,6 +14,10 @@ import com.shiroyama.chess2.chessboard.pieces.Team;
 
 import java.util.ArrayList;
 
+/**
+ * Represents the state of the chessboard and manages user input.
+ * This class manages current turn, game board, valid moves and selected pieces.
+ */
 public class GameState implements InputProcessor {
 
     private ChessBoard board;
@@ -27,6 +31,14 @@ public class GameState implements InputProcessor {
 
     private float centerX, centerY;
 
+    /**
+     * Constructor for the class
+     *
+     * @param size the size of the game board
+     * @param board the ChessBoard object representing the game board
+     * @param centerX the x-coordinate of the board's center
+     * @param centerY the y-coordinate of the board's center
+     */
     public GameState(int size, ChessBoard board, float centerX, float centerY) {
         validMoves = new ArrayList<TargetPoint>();
         currentTurn = Team.WHITE;
@@ -51,6 +63,11 @@ public class GameState implements InputProcessor {
         this.board = board;
     }
 
+    /**
+     * Draws the game state, including selected pieces and valid moves.
+     *
+     * @param batch the SpriteBatch used for drawing
+     */
     public void draw(SpriteBatch batch) {
         if (selected != null) {
             IntRect tile = board.getRectangle(selected);
@@ -84,6 +101,15 @@ public class GameState implements InputProcessor {
         return false;
     }
 
+    /**
+     * Handles mouse click input to the game board.
+     *
+     * @param x the x-coordinate of the touch
+     * @param y the y-coordinate of the touch
+     * @param pointer the pointer for the event
+     * @param button the button that was pressed
+     * @return true if the input was process, false otherwise
+     */
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
         if (button != 0 && board.isPromoting()) {
