@@ -8,6 +8,9 @@ import com.shiroyama.chess2.utils.ConfigurationManager;
 
 import java.util.List;
 
+/**
+ * Represents a chess piece with its properties and actions.
+ */
 public class PieceInfo {
 
     private Team team;
@@ -16,6 +19,13 @@ public class PieceInfo {
     private float attackRate;
     private TargetPoint position;
 
+    /**
+     * Constructor for the class.
+     *
+     * @param team the team of the piece (BLACK or WHITE)
+     * @param pieceType the type of the piece (PAWN, BISHOP, etc.)
+     * @param position the initial position of the piece on the board
+     */
     public PieceInfo(Team team, PieceType pieceType, TargetPoint position) {
         super();
         this.team = team;
@@ -24,14 +34,31 @@ public class PieceInfo {
         loadStats(pieceType);
     }
 
+    /**
+     * Gets the name of the piece, including its color and type.
+     *
+     * @return a string representation of the piece's name.
+     */
     public String getName(){
         return ((team == Team.WHITE) ? "white" : "black") + "-" + pieceType.toString().toLowerCase();
     }
 
+    /**
+     * Gets the name of the piece for display after the combat is over.
+     *
+     * @param combatOver indicates whether combat has ended
+     * @return a string representation of the piece's name for post-combat display
+     */
     public String getName(boolean combatOver){
         return ((team == Team.WHITE) ? "WHITE" : "BLACK") + " " + pieceType.toString();
     }
 
+    /**
+     * Gets the default HP (hit points) for a given piece type.
+     *
+     * @param pieceType the type of the piece
+     * @return the default HP value for the specified piece type
+     */
     public static int getDefaultHp(PieceType pieceType){
         switch (pieceType){
             case PAWN: return 1;
@@ -44,6 +71,12 @@ public class PieceInfo {
         }
     }
 
+    /**
+     * Gets the default attack rate (number of projectiles it shoots in a second) for a given piece type.
+     *
+     * @param pieceType the type of the piece
+     * @return the default attack rate value for the specified piece type
+     */
     private float getDefaultAttackRate(PieceType pieceType){
         switch (pieceType){
             case PAWN: return 1f;
@@ -56,19 +89,40 @@ public class PieceInfo {
         }
     }
 
+    /**
+     * Creates and adds new projectiles to the list of active projectiles.
+     *
+     * @param targetPosition the target position for the projectile
+     * @param projectiles the list of active projectiles which the new projectile will be added
+     */
     public void shoot(TargetPoint targetPosition, List<Projectile> projectiles){
         Projectile projectile = new Projectile(this.team, position, targetPosition);
         projectiles.add(projectile);
     }
 
+    /**
+     * Gets the position of the piece.
+     *
+     * @return the position
+     */
     public TargetPoint getPosition(){
         return position;
     }
 
+    /**
+     * Sets the position of the piece.
+     *
+     * @param position the new position
+     */
     public void setPosition(TargetPoint position){
         this.position = position;
     }
 
+    /**
+     * Loads the stats of a piece type from a file.
+     *
+     * @param pieceType the piece type which stats are required
+     */
     private void loadStats(PieceType pieceType){
 
         ConfigurationManager configurationManager = ConfigurationManager.getInstance();
@@ -76,34 +130,74 @@ public class PieceInfo {
         this.attackRate = configurationManager.getAttackRate(pieceType);
     }
 
+    /**
+     * Gets the team of the piece.
+     *
+     * @return the team
+     */
     public Team getTeam() {
         return team;
     }
 
+    /**
+     * Sets the team of the piece.
+     *
+     * @param team the new team
+     */
     public void setTeam(Team team) {
         this.team = team;
     }
 
+    /**
+     * Gets the piece type of the piece.
+     *
+     * @return the piece type
+     */
     public PieceType getPieceType() {
         return pieceType;
     }
 
+    /**
+     * Sets the piece type of the piece.
+     *
+     * @param pieceType the new piece type
+     */
     public void setPieceType(PieceType pieceType) {
         this.pieceType = pieceType;
     }
 
+    /**
+     * Gets the HP of the piece.
+     *
+     * @return the HP
+     */
     public int getHp() {
         return hp;
     }
 
+    /**
+     * Sets the HP of the piece.
+     *
+     * @param hp the new HP
+     */
     public void setHp(int hp) {
         this.hp = hp;
     }
 
+    /**
+     * Gets the attack rate of the piece.
+     *
+     * @return the attack rate
+     */
     public float getAttackRate() {
         return attackRate;
     }
 
+    /**
+     * Sets the attack rate of the piece.
+     *
+     * @param attackRate the new attack rate
+     */
     public void setAttackRate(float attackRate) {
         this.attackRate = attackRate;
     }
