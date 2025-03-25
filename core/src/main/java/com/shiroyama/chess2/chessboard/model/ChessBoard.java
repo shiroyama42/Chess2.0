@@ -155,7 +155,7 @@ public class ChessBoard {
     }
 
     public TargetPoint getPoint(int x, int y){
-        return new TargetPoint((float) x / squareSize, 7- (float) y /squareSize);
+        return new TargetPoint( x / squareSize, 7 - y /squareSize);
     }
 
     public boolean isInBounds(TargetPoint location){
