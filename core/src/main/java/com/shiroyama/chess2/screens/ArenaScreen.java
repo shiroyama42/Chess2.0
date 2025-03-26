@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -15,7 +16,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.arena.Arena;
 import com.shiroyama.chess2.utils.PieceMovementHandler;
@@ -34,7 +37,7 @@ public class ArenaScreen implements Screen {
 
     private ChessGame game;
     private SpriteBatch batch;
-    private Texture attackerTexture, defenderTexture, gunTexture, projectileTexture;
+    private Texture attackerTexture, defenderTexture, gunTexture, projectileTexture, backgroundTexture;
     private Arena arena;
     private PieceMovementHandler movementHandler;
 
@@ -69,6 +72,7 @@ public class ArenaScreen implements Screen {
 
         gunTexture = new Texture("arena_textures/gun.png");
         projectileTexture = new Texture("arena_textures/projectile.png");
+        backgroundTexture = new Texture("arena_textures/arena_background.png");
 
         font = new BitmapFont();
         font.getData().setScale(3);
@@ -185,6 +189,7 @@ public class ArenaScreen implements Screen {
         }
 
         batch.begin();
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         drawPiece(attackerTexture, arena.getAttacker().getPosition(), arena.getDefender().getPosition(), gunTexture);
         drawPiece(defenderTexture, arena.getDefender().getPosition(), arena.getAttacker().getPosition(), gunTexture);
 
@@ -224,7 +229,7 @@ public class ArenaScreen implements Screen {
     }
 
     @Override
-    public void resize(int i, int i1) {
+    public void resize(int width, int height) {
     }
 
     @Override
@@ -250,6 +255,7 @@ public class ArenaScreen implements Screen {
         if (skin != null) {
             skin.dispose();
         }
+        backgroundTexture.dispose();
     }
 
     private void drawPiece(Texture texture, TargetPoint position, TargetPoint targetPosition, Texture gunTexture){
