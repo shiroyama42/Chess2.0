@@ -96,7 +96,10 @@ public class PieceInfo {
      * @param projectiles the list of active projectiles which the new projectile will be added
      */
     public void shoot(TargetPoint targetPosition, List<Projectile> projectiles){
-        Projectile projectile = new Projectile(this.team, position, targetPosition);
+
+        TargetPoint centeredTargetPosition =
+            new TargetPoint(targetPosition.getX() + 0.5f,targetPosition.getY() + 0.5f);
+        Projectile projectile = new Projectile(this.team, position, centeredTargetPosition);
         projectiles.add(projectile);
     }
 

@@ -133,6 +133,11 @@ public class ArenaScreen implements Screen {
     private float countdownTimer = 3f;
 
     /**
+     * Scale factor based on the screen's size for drawing pieces, health bar, projectiles and gun textures.
+     */
+    private float pieceScaleFactor, healthBarScaleFactor;
+
+    /**
      * Constructor for the class.
      *
      * @param attacker the attacking piece
@@ -167,11 +172,16 @@ public class ArenaScreen implements Screen {
         float screenWidthInUnits = Gdx.graphics.getWidth() / 50f;
         float screenHeightInUnits = Gdx.graphics.getHeight() / 50f;
 
-        attacker.getPosition().setX(screenWidthInUnits / 2);
-        attacker.getPosition().setY(screenHeightInUnits - 1.3f);
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
 
-        defender.getPosition().setX(screenWidthInUnits / 2);
-        defender.getPosition().setY(0.5f);
+        attacker.getPosition().setX(screenWidth / (2 * 50f));
+        attacker.getPosition().setY((screenHeight * 0.8f) / 50f);
+
+        defender.getPosition().setX(screenWidth / (2 * 50f));
+        defender.getPosition().setY((screenHeight * 0.2f) / 50f);
+
+        pieceScaleFactor = Math.min(screenWidth, screenHeight) / 400f;
 
         Gdx.input.setInputProcessor(stage);
     }
@@ -189,14 +199,6 @@ public class ArenaScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(254f / 255f, 156f / 255f, 28f / 255f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        if (!combatOver){
-            arena.update(delta);
-            drawHealthBar(arena.getAttacker(), arena.getAttacker().getPosition().getX() * 50,
-                (arena.getAttacker().getPosition().getY() + 1) * 50);
-            drawHealthBar(arena.getDefender(), arena.getDefender().getPosition().getX() * 50,
-                (arena.getDefender().getPosition().getY() + 1) * 50);
-        }
 
         if (!kingDied && arena.isCombatOver()){
             PieceInfo winner = arena.attackerWon() ? arena.getAttacker() : arena.getDefender();
@@ -273,9 +275,22 @@ public class ArenaScreen implements Screen {
 
         batch.begin();
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        drawPiece(attackerTexture, arena.getAttacker().getPosition(), arena.getDefender().getPosition(), gunTexture);
-        drawPiece(defenderTexture, arena.getDefender().getPosition(), arena.getAttacker().getPosition(), gunTexture);
 
+        List<Projectile> projectiles = arena.getProjectiles();
+        for (Projectile projectile : projectiles){
+            float projectileSize = 10 * pieceScaleFactor;
+            batch.draw(projectileTexture,
+                projectile.getPosition().getX() * 50,
+                projectile.getPosition().getY() * 50,
+                projectileSize, projectileSize);
+        }
+
+        drawPiece(attackerTexture, arena.getAttacker().getPosition(), arena.getDefender().getPosition(), gunTexture, arena.getAttacker());
+        drawPiece(defenderTexture, arena.getDefender().getPosition(), arena.getAttacker().getPosition(), gunTexture, arena.getDefender());
+
+        batch.end();
+
+        batch.begin();
         if (!combatStarted){
             countdownTimer -= delta;
             if (countdownTimer <= 0){
@@ -285,11 +300,6 @@ public class ArenaScreen implements Screen {
             }else{
                 gameOverMessage = String.format("%.1f", countdownTimer);
             }
-        }
-
-        List<Projectile> projectiles = arena.getProjectiles();
-        for (Projectile projectile : projectiles){
-            batch.draw(projectileTexture, projectile.getPosition().getX() * 50, projectile.getPosition().getY() * 50, 10, 10);
         }
 
         if (/*kingDied && */gameOverMessage != null) {
@@ -305,6 +315,7 @@ public class ArenaScreen implements Screen {
             stage.act(delta);
             stage.draw();
         } else {
+            arena.update(delta);
             if (combatStarted){
                 handleMovement();
             }
@@ -352,17 +363,35 @@ public class ArenaScreen implements Screen {
      * @param targetPosition the position of the target piece
      * @param gunTexture the texture of the gun
      */
-    private void drawPiece(Texture texture, TargetPoint position, TargetPoint targetPosition, Texture gunTexture){
+    private void drawPiece(Texture texture, TargetPoint position, TargetPoint targetPosition, Texture gunTexture, PieceInfo piece){
         if(position == null || targetPosition == null){
             return;
         }
 
-        batch.draw(texture, position.getX() * 50, position.getY() * 50, 50, 50);
+        float pieceWidth = 50 * pieceScaleFactor;
+        float pieceHeight = 50 * pieceScaleFactor;
+
+        batch.draw(texture,
+            position.getX() * 50,
+            position.getY() * 50,
+            pieceWidth / 2,
+            pieceHeight /2,
+            pieceWidth,
+            pieceHeight,
+            1,
+            1,
+            0,
+            0,
+            0,
+            texture.getWidth(),
+            texture.getHeight(),
+            false,
+            false);
 
         float angle = getGunAngle(targetPosition, position);
-        float gunWidth =  10;
-        float gunHeight = 10;
-        float gunOffset = 5;
+        float gunWidth =  10 * pieceWidth * 0.11f;
+        float gunHeight = 10 * pieceHeight * 0.11f;
+        float gunOffset = 5 * pieceScaleFactor;
 
         batch.draw(gunTexture,
             position.getX() * 50 + gunOffset - gunWidth / 2,
@@ -371,8 +400,8 @@ public class ArenaScreen implements Screen {
             gunHeight / 2,
             gunWidth,
             gunHeight,
-            6,
-            6,
+            1,
+            1,
             angle,
             0,
             0,
@@ -381,6 +410,14 @@ public class ArenaScreen implements Screen {
             false,
             false
         );
+
+        batch.end();
+
+        if (!combatOver){
+            drawHealthBar(piece, position.getX() * 50, position.getY() * 50, pieceWidth, pieceHeight);
+        }
+
+        batch.begin();
     }
 
     /**
@@ -434,18 +471,22 @@ public class ArenaScreen implements Screen {
      * @param x the x-coordinate of the health bar
      * @param y the y-coordinate of the health bar
      */
-    private void drawHealthBar(PieceInfo piece, float x, float y){
+    private void drawHealthBar(PieceInfo piece, float x, float y, float pieceWidth, float pieceHeight){
         float healthPercentage = (float) piece.getHp() / loadDefaultHp(piece.getPieceType());
 
-        float barWidth = 50;
-        float barHeight = 5;
+        float barWidth = Gdx.graphics.getWidth() * 0.1f; // 10% of screen width
+        float barHeight = Gdx.graphics.getHeight() * 0.01f; // 1% of screen height
+
+        // Calculate health bar position
+        float healthBarX = x + (pieceWidth - barWidth) / 2; // Center horizontally with the piece
+        float healthBarY = y + pieceHeight + barHeight;
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(0.5f, 0.5f, 0.5f, 1);
-        shapeRenderer.rect(x, y, barWidth, barHeight);
+        shapeRenderer.rect(healthBarX, healthBarY, barWidth, barHeight);
 
         shapeRenderer.setColor(0, 1, 0, 1);
-        shapeRenderer.rect(x, y, barWidth * healthPercentage, barHeight);
+        shapeRenderer.rect(healthBarX, healthBarY, barWidth * healthPercentage, barHeight);
         shapeRenderer.end();
     }
 

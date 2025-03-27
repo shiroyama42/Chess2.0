@@ -29,6 +29,8 @@ public class PieceMovementHandler {
      */
     private float minY = 0.2f;
 
+    private float movementSpeed;
+
     /**
      * Constructor for the class.
      *
@@ -38,6 +40,9 @@ public class PieceMovementHandler {
     public PieceMovementHandler(float screenWidth, float screenHeight) {
         this.maxX = (screenWidth / 50) - 1.15f;
         this.maxY = (screenHeight / 50) - 1.3f;
+
+        float minDimension = Math.min(screenWidth, screenHeight);
+        this.movementSpeed = minDimension / 10000f;
     }
 
     /**
@@ -47,7 +52,7 @@ public class PieceMovementHandler {
      */
     public void moveUp(PieceInfo piece){
         if (piece != null && piece.getPosition() != null && piece.getPosition().getY() < maxY){
-            piece.getPosition().setY(piece.getPosition().getY() + 0.07f);
+            piece.getPosition().setY(piece.getPosition().getY() + movementSpeed);
         }
     }
 
@@ -58,7 +63,7 @@ public class PieceMovementHandler {
      */
     public void moveDown(PieceInfo piece){
         if (piece != null && piece.getPosition() != null && piece.getPosition().getY() > minY){
-            piece.getPosition().setY(piece.getPosition().getY() - 0.07f);
+            piece.getPosition().setY(piece.getPosition().getY() - movementSpeed);
         }
     }
 
@@ -69,7 +74,7 @@ public class PieceMovementHandler {
      */
     public void moveLeft(PieceInfo piece){
         if (piece != null && piece.getPosition() != null && piece.getPosition().getX() > minX){
-            piece.getPosition().setX(piece.getPosition().getX() - 0.07f);
+            piece.getPosition().setX(piece.getPosition().getX() - movementSpeed);
         }
     }
 
@@ -80,7 +85,7 @@ public class PieceMovementHandler {
      */
     public void moveRight(PieceInfo piece){
         if (piece != null && piece.getPosition() != null && piece.getPosition().getX() < maxX){
-            piece.getPosition().setX(piece.getPosition().getX() + 0.07f);
+            piece.getPosition().setX(piece.getPosition().getX() + movementSpeed);
         }
     }
 }

@@ -63,7 +63,7 @@ public class MenuScreen implements Screen {
 
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
-        TextButton playButton = new TextButton("Local Play", skin);
+        TextButton playButton = new TextButton("Play", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
