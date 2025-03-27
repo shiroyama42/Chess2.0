@@ -1,6 +1,7 @@
 package com.shiroyama.chess2.utils;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 
@@ -13,9 +14,27 @@ public class ConfigurationManager {
     private Properties properties;
     private final String configFilePath = "stats.cfg";
 
+    private Preferences graphicalPreferences;
+
     private ConfigurationManager() {
         properties = new Properties();
         loadConfiguration();
+
+        graphicalPreferences = Gdx.app.getPreferences("chess2-settings");
+
+        if (!graphicalPreferences.contains("window_width")){
+            graphicalPreferences.putInteger("window_width", 640);
+        }
+        if (!graphicalPreferences.contains("window_height")){
+            graphicalPreferences.putInteger("window_height", 480);
+        }
+        if (!graphicalPreferences.contains("vsync")){
+            graphicalPreferences.putBoolean("vsync", true);
+        }
+        if (!graphicalPreferences.contains("fullscreen")){
+            graphicalPreferences.putBoolean("fullscreen", false);
+        }
+        graphicalPreferences.flush();
     }
 
     public static ConfigurationManager getInstance() {
@@ -92,6 +111,8 @@ public class ConfigurationManager {
             OutputStream out = file.write(false);
             properties.store(out, "Chess Piece Stats Configuration");
             out.close();
+
+            saveGraphicsConfiguration();
         } catch (IOException e) {
             Gdx.app.error("ConfigurationManager", "Error saving stats.cfg: " + e.getMessage());
         }
@@ -100,5 +121,39 @@ public class ConfigurationManager {
     public void reloadConfiguration() {
         properties.clear();
         loadConfiguration();
+    }
+
+
+    public void setWindowSize(int width, int height){
+        graphicalPreferences.putInteger("window_height", height);
+        graphicalPreferences.putInteger("window_width", width);
+    }
+
+    public void setVSync(boolean enabled){
+        graphicalPreferences.putBoolean("vsync", enabled);
+    }
+
+    public void setFullscreen(boolean enabled){
+        graphicalPreferences.putBoolean("fullscreen", enabled);
+    }
+
+    public int getWindowWidth(){
+        return graphicalPreferences.getInteger("window_width");
+    }
+
+    public int getWindowHeight(){
+        return graphicalPreferences.getInteger("window_height");
+    }
+
+    public boolean isVSyncEnabled(){
+        return graphicalPreferences.getBoolean("vsync");
+    }
+
+    public boolean isFullscreenEnabled(){
+        return graphicalPreferences.getBoolean("fullscreen");
+    }
+
+    public void saveGraphicsConfiguration(){
+        graphicalPreferences.flush();
     }
 }
