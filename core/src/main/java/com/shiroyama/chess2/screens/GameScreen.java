@@ -3,7 +3,6 @@ package com.shiroyama.chess2.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,34 +18,92 @@ import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
+import com.shiroyama.chess2.screens.dialog.PromotionDialog;
 import com.shiroyama.chess2.utils.TextureLoader;
 
 import java.util.HashMap;
 
+/**
+ * Represents the {@link Screen} where the normal chess game takes place.
+ * Handles {@link com.shiroyama.chess2.chessboard.utils.AttackListener}, {@link com.shiroyama.chess2.chessboard.utils.PromotionListener},
+ * rendering, updating the game state.
+ * Manages UI elements, such as promotion button, transition to arena screen when an attack occurs.
+ */
 public class GameScreen implements Screen {
 
+    /**
+     * The main game instance that manages screen transitions and game logic.
+     */
     private ChessGame game;
+
+    /**
+     * A {@link SpriteBatch} used for rendering textures and sprites.
+     */
     private SpriteBatch batch;
+
+    /**
+     * The {@link ChessBoard} instance representing the game board.
+     */
     private ChessBoard board;
+
+    /**
+     * The {@link GameState} instance that manages the current state of the game, including turn management,
+     * valid moves, and selected pieces.
+     */
     private GameState gameState;
 
+    /**
+     * x- and y-coordinate of the center of the board.
+     */
     private float centerX, centerY;
 
+    /**
+     * Indicates whether the game is currently in the arena screen for combat between two pieces.
+     */
     private boolean isInArena = false;
+
+    /**
+     * The {@link ArenaScreen} instance representing the combat arena screen.
+     */
     private ArenaScreen arenaScreen;
 
+    /**
+     * The original positions of the attacking and the defending pieces.
+     */
     private TargetPoint originalAttackerPosition, originalDefenderPosition;
 
+    /**
+     * The {@link Stage} used for managing UI elements, such as promotion dialogs.
+     */
     private Stage stage;
+
+    /**
+     * Indicates whether the promoting dialog is currently being displayed.
+     */
     private boolean showingDialog = false;
+
+    /**
+     * The {@link PieceInfo} instance representing the piece that is being promoted.
+     */
     private PieceInfo promotingPiece;
 
+    /**
+     * Represents the attacking piece.
+     */
     private PieceInfo attackerPiece;
 
+    /**
+     * Constructor for the class.
+     */
     public GameScreen(){
         this.game = (ChessGame) Gdx.app.getApplicationListener();
     }
 
+    /**
+     * Called when this screen becomes the current screen for the game.
+     * This method is part of the {@link Screen} interface and is invoked by the LibGDX framework
+     * when the screen is displayed.
+     */
     @Override
     public void show() {
         float w = Gdx.graphics.getWidth();
@@ -111,6 +168,11 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(gameState);
     }
 
+    /**
+     * Renders the chess board, game state and pieces.
+     *
+     * @param delta the time in seconds since the last frame
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -148,11 +210,21 @@ public class GameScreen implements Screen {
     public void hide() {
     }
 
+    /**
+     * Releases all resources used by this screen, such as batch.
+     */
     @Override
     public void dispose() {
         batch.dispose();
     }
 
+    /**
+     * Handles the transition back from the {@link ArenaScreen}.
+     * This method is called when the combat between the two pieces end.
+     *
+     * @param winner the piece that won the combat
+     * @param loser the piece that lost the combat
+     */
     public void exitArena(PieceInfo winner, PieceInfo loser){
         isInArena = false;
         if (winner == null){
@@ -203,6 +275,12 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Determines the type of piece to promote a pawn to based on a clicked button in the promotion dialog.
+     *
+     * @param actor the UI actor ({@link ImageButton} that was clicked
+     * @return the {@link PieceType} corresponding to the clicked button, or null if the button is invalid
+     */
     private PieceType determinePieceTypeFromButton(Actor actor) {
         if (actor instanceof ImageButton) {
             String name = ((ImageButton) actor).getName();

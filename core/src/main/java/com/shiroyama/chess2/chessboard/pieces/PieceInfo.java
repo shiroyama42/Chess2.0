@@ -22,8 +22,8 @@ public class PieceInfo {
     /**
      * Constructor for the class.
      *
-     * @param team the team of the piece (BLACK or WHITE)
-     * @param pieceType the type of the piece (PAWN, BISHOP, etc.)
+     * @param team the {@link Team} of the piece (BLACK or WHITE)
+     * @param pieceType the {@link PieceType} of the piece (PAWN, BISHOP, etc.)
      * @param position the initial position of the piece on the board
      */
     public PieceInfo(Team team, PieceType pieceType, TargetPoint position) {
@@ -90,7 +90,7 @@ public class PieceInfo {
     }
 
     /**
-     * Creates and adds new projectiles to the list of active projectiles.
+     * Creates and adds new {@link Projectile} to the list of active projectiles.
      *
      * @param targetPosition the target position for the projectile
      * @param projectiles the list of active projectiles which the new projectile will be added
@@ -131,7 +131,7 @@ public class PieceInfo {
     }
 
     /**
-     * Gets the team of the piece.
+     * Gets the {@link Team} of the piece.
      *
      * @return the team
      */
@@ -140,7 +140,7 @@ public class PieceInfo {
     }
 
     /**
-     * Sets the team of the piece.
+     * Sets the {@link Team} of the piece.
      *
      * @param team the new team
      */
@@ -149,7 +149,7 @@ public class PieceInfo {
     }
 
     /**
-     * Gets the piece type of the piece.
+     * Gets the {@link PieceType} of the piece.
      *
      * @return the piece type
      */
@@ -158,7 +158,7 @@ public class PieceInfo {
     }
 
     /**
-     * Sets the piece type of the piece.
+     * Sets the {@link PieceType} of the piece.
      *
      * @param pieceType the new piece type
      */

@@ -14,17 +14,47 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.shiroyama.chess2.ChessGame;
 
+/**
+ * Represents the main menu screen of the chess game.
+ * This screen provides options for starting a local game, accessing settings,
+ * or exiting the application.
+ */
 public class MenuScreen implements Screen {
 
+    /**
+     * The main game instance that manages screen transitions and game logic.
+     */
     private ChessGame chessGame;
+
+    /**
+     * A {@link SpriteBatch} used for rendering textures and sprites.
+     */
     private SpriteBatch batch;
+
+    /**
+     * The {@link Stage} used for managing UI elements, such as promotion dialogs.
+     */
     private Stage stage;
+
+    /**
+     *  A {@link Skin} used for styling UI elements such as buttons and tables.
+     */
     private Skin skin;
 
+    /**
+     * Constructor for the class.
+     *
+     * @param chessGame the main game instance
+     */
     public MenuScreen(ChessGame chessGame) {
         this.chessGame = chessGame;
     }
 
+    /**
+     * Called when this screen becomes the current screen for the game.
+     * Initializes the UI components, including buttons and their listeners,
+     * and sets up the layout using a {@link Table}.
+     */
     @Override
     public void show() {
         batch = new SpriteBatch();
@@ -34,12 +64,10 @@ public class MenuScreen implements Screen {
         skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         TextButton playButton = new TextButton("Local Play", skin);
-        TextButton aiButton = new TextButton("VS AI", skin);
         TextButton settingsButton = new TextButton("Settings", skin);
         TextButton exitButton = new TextButton("Exit", skin);
 
         playButton.getLabel().setFontScale(2);
-        aiButton.getLabel().setFontScale(2);
         settingsButton.getLabel().setFontScale(2);
         exitButton.getLabel().setFontScale(2);
 
@@ -47,13 +75,6 @@ public class MenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 chessGame.setScreen(new GameScreen());
-            }
-        });
-
-        aiButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("VS AI button clicked");
             }
         });
 
@@ -79,9 +100,6 @@ public class MenuScreen implements Screen {
         table.add(playButton).fillX().uniformX().pad(10);
         table.row().pad(10);
 
-        table.add(aiButton).fillX().uniformX().pad(10);
-        table.row().pad(10);
-
         table.add(settingsButton).fillX().uniformX().pad(10);
         table.row().pad(10);
 
@@ -90,8 +108,12 @@ public class MenuScreen implements Screen {
         stage.addActor(table);
     }
 
+    /**
+     * Renders the menu screen, including clearing the screen and drawing UI elements.
+     * @param delta the time in seconds between the last frame
+     */
     @Override
-    public void render(float v) {
+    public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -99,6 +121,12 @@ public class MenuScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Called when the application window is resized.
+     *
+     * @param width the new width
+     * @param height the new height
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
@@ -116,6 +144,9 @@ public class MenuScreen implements Screen {
     public void hide() {
     }
 
+    /**
+     * Releases all resources used by this screen, such as textures, fonts, and stages.
+     */
     @Override
     public void dispose() {
         batch.dispose();

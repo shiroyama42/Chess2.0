@@ -15,7 +15,7 @@ import com.shiroyama.chess2.utils.ScoreBoardManager;
 import java.util.HashMap;
 
 /**
- * Represents the chessboard with pieces and game logic.
+ * Represents the chess board with pieces and game logic.
  * Manages board state, piece movement, attacks and promotions.
  */
 public class ChessBoard {
@@ -36,12 +36,12 @@ public class ChessBoard {
     private int squareSize;
 
     /**
-     * The texture representing the chessboard.
+     * The {@link Texture} representing the chessboard.
      */
     private Texture boardTexture;
 
     /**
-     * Map of piece textures indexed by piece name.
+     * {@link HashMap} of piece textures indexed by piece name.
      */
     private final HashMap<String, Texture> textures;
 
@@ -56,7 +56,7 @@ public class ChessBoard {
     private TargetPoint blackKing;
 
     /**
-     * Manager for tracking game scores.
+     * {@link ScoreBoardManager} for tracking game scores.
      */
     private ScoreBoardManager scoreBoardManager;
 
@@ -69,7 +69,7 @@ public class ChessBoard {
      * Constructor for the class.
      *
      * @param size the size of the board in pixels
-     * @param textures HashMap containing textures for each chess piece
+     * @param textures {@link HashMap} containing {@link Texture} for each chess piece
      */
     public ChessBoard(int size, HashMap<String, Texture> textures) {
         this.size = size;
@@ -118,7 +118,7 @@ public class ChessBoard {
     }
 
     /**
-     * Generates the textures for the chess board with alternating colors.
+     * Generates the {@link Texture} for the chess board with alternating colors.
      */
     private void generateTexture(){
         Pixmap pixmap = new Pixmap(size, size, Pixmap.Format.RGBA8888);
@@ -141,7 +141,7 @@ public class ChessBoard {
     /**
      * Draws the chessboard and pieces.
      *
-     * @param batch the SpriteBatch user for drawing
+     * @param batch the {@link SpriteBatch} user for drawing
      * @param offsetX the x-coordinate offset for drawing
      * @param offsetY the y-coordinate offset for drawing
      */
@@ -224,7 +224,7 @@ public class ChessBoard {
      *
      * @param x the x-coordinate on the screen
      * @param y the y-coordinate on the screen
-     * @return a TargetPoint representing the board coordinates
+     * @return a {@link TargetPoint} representing the board coordinates
      */
     public TargetPoint getPoint(int x, int y){
         return new TargetPoint( x / squareSize, 7 - y /squareSize);
@@ -244,7 +244,7 @@ public class ChessBoard {
      * Gets a rectangle representing a square on the board.
      *
      * @param point the board coordinates
-     * @return an IntRect representing the square
+     * @return an {@link IntRect} representing the square
      */
     public IntRect getRectangle(TargetPoint point){
         return new IntRect((int)point.getX()*squareSize, (int)point.getY() * squareSize, squareSize, squareSize);
@@ -253,7 +253,7 @@ public class ChessBoard {
     private AttackListener attackListener;
 
     /**
-     * Sets a listener for attack events.
+     * Sets a {@link AttackListener} for attack events.
      *
      * @param listener the attack listener to set
      */
@@ -264,7 +264,7 @@ public class ChessBoard {
     private PromotionListener promotionListener;
 
     /**
-     * Sets a listener for promotion events.
+     * Sets a {@link PromotionListener} for promotion events.
      *
      * @param listener the promotion listener to set
      */

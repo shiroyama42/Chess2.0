@@ -13,13 +13,38 @@ import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
 import com.shiroyama.chess2.utils.ScoreBoardManager;
 
+/**
+ * Represents the scoreboard screen of the chess game.
+ * This screen displays statistics about the current game session, including the total number of moves,
+ * the count of captured pieces for each type and team, and a button to return to the main menu.
+ */
 public class ScoreBoardScreen implements Screen {
 
+    /**
+     * The main game instance that manages the screen transitions and game logic.
+     */
     private ChessGame game;
+
+    /**
+     * The {@link Stage} used for managing UI elements like labels, tables, and buttons.
+     */
     private Stage stage;
+
+    /**
+     * A {@link Skin} used for styling UI elements such as buttons, labels, and tables.
+     */
     private Skin skin;
+
+    /**
+     * The {@link ScoreBoardManager} instance used to retrieve game statistics, such as move counts and captured pieces.
+     */
     private ScoreBoardManager scoreBoardManager;
 
+    /**
+     * Constructor for the class.
+     *
+     * @param game the main game instance
+     */
     public ScoreBoardScreen(ChessGame game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -30,6 +55,10 @@ public class ScoreBoardScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Creates the user interface for the scoreboard screen.
+     * This includes a title, labels for move counts and captured pieces, and a "Back to Main Menu" button.
+     */
     private void createUI(){
         Table mainTable = new Table();
         mainTable.setFillParent(true);
@@ -78,13 +107,22 @@ public class ScoreBoardScreen implements Screen {
         mainTable.add(backButton).colspan(4).width(200).height(50);
     }
 
+    /**
+     * Called when this screen becomes the current screen for the game.
+     * Sets the input processor to the stage to handle user interactions.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Renders the scoreboard screen, including clearing the screen and drawing the UI elements.
+     *
+     * @param delta the time between the last frame
+     */
     @Override
-    public void render(float v) {
+    public void render(float delta) {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -108,6 +146,9 @@ public class ScoreBoardScreen implements Screen {
     public void hide() {
     }
 
+    /**
+     * Releases all resources used by this screen, such as textures, fonts, and stages.
+     */
     @Override
     public void dispose() {
         stage.dispose();

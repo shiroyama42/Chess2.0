@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * Represents the combat area where the pieces fight each other.
- * Manages combat state, projectiles and interactions between the two pieces.
+ * Manages combat state, {@link Projectile} and interactions between the two pieces.
  */
 public class Arena {
 
@@ -25,7 +25,7 @@ public class Arena {
     private PieceInfo defender;
 
     /**
-     * List of active projectiles in the arena.
+     * List of active {@link Projectile} in the arena.
      */
     private List<Projectile> projectiles;
 
@@ -126,7 +126,7 @@ public class Arena {
     }
 
     /**
-     * Gets the list of active projectiles.
+     * Gets the list of active {@link Projectile}.
      *
      * @return a list containing the active projectiles
      */

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -16,9 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.arena.Arena;
 import com.shiroyama.chess2.utils.PieceMovementHandler;
@@ -33,34 +30,115 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
+/**
+ * Represents the {@link Screen} where the chess arena combat takes place.
+ * Handles user input, rendering, updating the game state during combat between two chess pieces.
+ * Manages UI elements such as buttons and health bars, transitions to other screens when combat ends.
+ */
 public class ArenaScreen implements Screen {
 
+    /**
+     * The main game instance that manages screen transitions and game logic.
+     */
     private ChessGame game;
+
+    /**
+     * A {@link SpriteBatch} used for rendering textures and sprites.
+     */
     private SpriteBatch batch;
+
+    /**
+     * Textures for the attacker, defender, gun, projectile, and background.
+     */
     private Texture attackerTexture, defenderTexture, gunTexture, projectileTexture, backgroundTexture;
+
+    /**
+     * The {@link Arena} instance that manages the combat logic between the attacker and defender.
+     */
     private Arena arena;
+
+    /**
+     * Handles movement logic for the chess pieces.
+     */
     private PieceMovementHandler movementHandler;
 
+    /**
+     * Handles movement logic for the chess pieces.
+     */
     private BitmapFont font;
+
+    /**
+     * A {@link GlyphLayout} used to calculate text dimensions for proper alignment.
+     */
     private GlyphLayout layout;
+
+    /**
+     * The {@link Stage} used for managing UI elements like buttons.
+     */
     private Stage stage;
+
+    /**
+     * A {@link Skin} used for styling UI elements.
+     */
     private Skin skin;
 
+    /**
+     * Indicates whether the king has died, ending the game.
+     */
     private boolean kingDied = false;
+
+    /**
+     * Indicates whether the combat has ended.
+     */
     private boolean combatOver = false;
+
+    /**
+     * Tracks whether the score has been added to the scoreboard after combat ends.
+     */
     private boolean scoreAdded = false;
 
+    /**
+     * Stores the game over message to be displayed on the screen.
+     */
     private String gameOverMessage;
+
+    /**
+     * A button that allows the player to return to the main menu.
+     */
     private TextButton menuButton;
+
+    /**
+     * A button that allows the player to view the scoreboard.
+     */
     private TextButton scoreButton;
 
+    /**
+     * A {@link ShapeRenderer} used for drawing shapes like health bars.
+     */
     private ShapeRenderer shapeRenderer;
 
+    /**
+     * The {@link ScoreBoardManager} the scoreboard and records captures during combat.
+     */
     private ScoreBoardManager scoreBoardManager;
 
+    /**
+     * Indicates whether the combat has started.
+     */
     private boolean combatStarted = false;
+
+    /**
+     * A countdown timer before the combat begins.
+     */
     private float countdownTimer = 3f;
 
+    /**
+     * Constructor for the class.
+     *
+     * @param attacker the attacking piece
+     * @param defender the attacked piece
+     * @param game the main game instance
+     */
     public ArenaScreen(PieceInfo attacker, PieceInfo defender, ChessGame game){
         this.batch = new SpriteBatch();
         this.arena = new Arena(attacker, defender);
@@ -102,6 +180,11 @@ public class ArenaScreen implements Screen {
     public void show() {
     }
 
+    /**
+     * Renders the arena, chess pieces, projectiles, health bars and UI elements.
+     *
+     * @param delta the time in seconds since the last frame
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(254f / 255f, 156f / 255f, 28f / 255f, 1f);
@@ -244,6 +327,9 @@ public class ArenaScreen implements Screen {
     public void hide() {
     }
 
+    /**
+     * Removes all resources used by this screen, such as textures and fonts.
+     */
     @Override
     public void dispose() {
         batch.dispose();
@@ -258,6 +344,14 @@ public class ArenaScreen implements Screen {
         backgroundTexture.dispose();
     }
 
+    /**
+     * Draws the chess piece and the associated gun at the specified location.
+     *
+     * @param texture the texture of the chess piece
+     * @param position the position of the chess piece
+     * @param targetPosition the position of the target piece
+     * @param gunTexture the texture of the gun
+     */
     private void drawPiece(Texture texture, TargetPoint position, TargetPoint targetPosition, Texture gunTexture){
         if(position == null || targetPosition == null){
             return;
@@ -289,12 +383,22 @@ public class ArenaScreen implements Screen {
         );
     }
 
+    /**
+     * Calculates the angle of the gun relative to the target position.
+     *
+     * @param targetPosition the position of the target piece
+     * @param piecePosition the position of the piece
+     * @return the angle in degrees
+     */
     private float getGunAngle(TargetPoint targetPosition, TargetPoint piecePosition){
         float dx = targetPosition.getX() - piecePosition.getX();
         float dy = targetPosition.getY() - piecePosition.getY();
         return (float) Math.toDegrees(Math.atan2(dy, dx));
     }
 
+    /**
+     * Handles movement input for the chess piece based on keyboard input.
+     */
     private void handleMovement() {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             movementHandler.moveUp((arena.getAttacker().getTeam() == Team.WHITE) ? arena.getAttacker() : arena.getDefender());
@@ -323,6 +427,13 @@ public class ArenaScreen implements Screen {
         }
     }
 
+    /**
+     * Draws health bar above specified piece.
+     *
+     * @param piece the piece whose health bar needs to be drawn
+     * @param x the x-coordinate of the health bar
+     * @param y the y-coordinate of the health bar
+     */
     private void drawHealthBar(PieceInfo piece, float x, float y){
         float healthPercentage = (float) piece.getHp() / loadDefaultHp(piece.getPieceType());
 
@@ -338,6 +449,12 @@ public class ArenaScreen implements Screen {
         shapeRenderer.end();
     }
 
+    /**
+     * Loads the default HP value for a given piece type from the configuration file.
+     *
+     * @param pieceType the type of the piece
+     * @return the HP value of the specified piece type
+     */
     private int loadDefaultHp(PieceType pieceType){
         Properties props =  new Properties();
         FileHandle file = Gdx.files.internal("stats.cfg");

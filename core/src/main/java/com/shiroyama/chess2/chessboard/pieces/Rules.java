@@ -20,8 +20,8 @@ public class Rules {
      *
      * @param list the list which the valid moves will be added
      * @param selection the current position of the piece
-     * @param piece the piece for which to determine valid moves
-     * @param board the chessboard on which the piece is located
+     * @param piece the {@link PieceInfo} for which to determine valid moves
+     * @param board the {@link ChessBoard} on which the piece is located
      */
     public static void GetValidMoves(ArrayList<TargetPoint> list, TargetPoint selection, PieceInfo piece, ChessBoard board){
         switch (piece.getPieceType()){
@@ -51,8 +51,8 @@ public class Rules {
      *
      * @param list the list to which the valid moves will be added
      * @param selection the current position of the pawn
-     * @param team the team of the pawn (BLACK or WHITE)
-     * @param board the chess board on which the pawn is located
+     * @param team the {@link Team} of the pawn (BLACK or WHITE)
+     * @param board the {@link ChessBoard} on which the pawn is located
      */
     private static void getValidMovesPawn(ArrayList<TargetPoint> list, TargetPoint selection, Team team, ChessBoard board){
         int direction = (team == Team.BLACK) ? 1 : -1;
@@ -83,8 +83,8 @@ public class Rules {
      *
      * @param list the list to which the valid moves will be added
      * @param selection the current position of the bishop
-     * @param team  the team of the bishop (BLACK or WHITE)
-     * @param board the chess board on which the bishop is located
+     * @param team  the {@link Team} of the bishop (BLACK or WHITE)
+     * @param board the {@link ChessBoard} on which the bishop is located
      */
     private static void getValidMovesBishop(ArrayList<TargetPoint> list, TargetPoint selection, Team team, ChessBoard board){
         for (int xDir = -1; xDir <= 1; xDir += 2){
@@ -113,8 +113,8 @@ public class Rules {
      *
      * @param list the list to which the valid moves will be added
      * @param selection the current position of the rook
-     * @param team the team of the rook (BLACK or WHITE)
-     * @param board the chess board on which the rook is located
+     * @param team the {@link Team} of the rook (BLACK or WHITE)
+     * @param board the {@link ChessBoard}on which the rook is located
      */
     private static void getValidMovesRook(ArrayList<TargetPoint> list, TargetPoint selection, Team team, ChessBoard board){
         for (int direction = 0; direction < 2; direction++){
@@ -149,8 +149,8 @@ public class Rules {
      *
      * @param list the list to which the valid moves will be added
      * @param selection the current position of the knight
-     * @param team the team of the knight (BLACK or WHITE)
-     * @param board the chess board on which the knight is located
+     * @param team the {@link Team} of the knight (BLACK or WHITE)
+     * @param board the {@link ChessBoard} on which the knight is located
      */
     private static void getValidMovesKnight(ArrayList<TargetPoint> list, TargetPoint selection, Team team, ChessBoard board){
         for (int direction = 0; direction < 2; direction++){
@@ -180,8 +180,8 @@ public class Rules {
      *
      * @param list the list to which the valid moves will be added
      * @param selection the current position of the queen
-     * @param team the team of the queen (BLACK or WHITE)
-     * @param board the chess board on which the queen is located
+     * @param team the {@link Team} of the queen (BLACK or WHITE)
+     * @param board the {@link ChessBoard} on which the queen is located
      */
     private static void getValidMovesQueen(ArrayList<TargetPoint> list, TargetPoint selection, Team team, ChessBoard board){
         for (int xDir = -1; xDir <= 1; xDir++){
@@ -215,8 +215,8 @@ public class Rules {
      *
      * @param list the list to which the valid moves will be added
      * @param selection the current position of the king
-     * @param team the team of the king (BLACK or WHITE)
-     * @param board the chess board on which the king is located
+     * @param team the {@link Team} of the king (BLACK or WHITE)
+     * @param board the {@link ChessBoard} on which the king is located
      */
     private static void getValidMovesKing(ArrayList<TargetPoint> list, TargetPoint selection, Team team, ChessBoard board){
         for (int xDir = - 1; xDir <= 1; xDir++){

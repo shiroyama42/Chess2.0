@@ -15,27 +15,56 @@ import com.shiroyama.chess2.chessboard.pieces.Team;
 import java.util.ArrayList;
 
 /**
- * Represents the state of the chessboard and manages user input.
+ * Represents the state of the {@link ChessBoard} and manages user input.
  * This class manages current turn, game board, valid moves and selected pieces.
  */
 public class GameState implements InputProcessor {
 
+    /**
+     * The main game instance that manages screen transitions and game logic.
+     */
     private ChessBoard board;
+
+    /**
+     * The size of the game board.
+     */
     private int size;
+
+    /**
+     * Team which can move in the round.
+     */
     private Team currentTurn;
+
+    /**
+     * Represents an {@link ArrayList} for storing valid moves of specified piece.
+     */
     private ArrayList<TargetPoint> validMoves;
+
+    /**
+     * Represents the currently selected piece's position on the chess board.
+     */
     private TargetPoint selected;
 
+    /**
+     * A {@link Texture} used to visually highlight valid moves and the selected piece on the chessboard.
+     */
     private Texture overlayBoxTexture;
+
+    /**
+     * A sprite derived from the {@link #overlayBoxTexture} that is used to render the visual overlay.
+     */
     private Sprite overlayBoxSprite;
 
+    /**
+     * x- and y-coordinate of the board's center.
+     */
     private float centerX, centerY;
 
     /**
      * Constructor for the class
      *
      * @param size the size of the game board
-     * @param board the ChessBoard object representing the game board
+     * @param board the {@link ChessBoard} object representing the game board
      * @param centerX the x-coordinate of the board's center
      * @param centerY the y-coordinate of the board's center
      */
@@ -66,7 +95,7 @@ public class GameState implements InputProcessor {
     /**
      * Draws the game state, including selected pieces and valid moves.
      *
-     * @param batch the SpriteBatch used for drawing
+     * @param batch the {@link SpriteBatch} used for drawing
      */
     public void draw(SpriteBatch batch) {
         if (selected != null) {

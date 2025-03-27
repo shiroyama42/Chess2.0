@@ -12,13 +12,37 @@ import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.utils.ConfigurationManager;
 
+/**
+ * Represents the settings screen of the chess game.
+ * This screen allows players to configure various settings, including chess piece stats (HP and attack rate),
+ * graphics settings (resolution, fullscreen mode, and VSync), and provides options to apply changes or return
+ * to the main menu.
+ */
 public class SettingsScreen implements Screen {
 
+    /**
+     * The main game instance that manages screen transitions and game logic.
+     */
     private ChessGame game;
+
+    /**
+     * The {@link Stage} used for managing UI elements like buttons, tables, and input handling.
+     */
     private Stage stage;
+
+    /**
+     * A {@link Skin} used for styling UI elements such as buttons, labels, and tables.
+     */
     private Skin skin;
+
+    /**
+     * The {@link ConfigurationManager} instance used to manage and persist application settings.
+     */
     private ConfigurationManager configurationManager;
 
+    /**
+     * An array of supported resolutions, where each entry contains a label, width, and height.
+     */
     private final String[][] resolutions = {
         {"640x480", "640", "480"},
         {"800x600", "800", "600"},
@@ -28,10 +52,26 @@ public class SettingsScreen implements Screen {
         {"1920x1080", "1920", "1080"}
     };
 
+    /**
+     * A {@link SelectBox} used to select the screen resolution.
+     */
     private SelectBox<String> resolutionSelect;
+
+    /**
+     * A {@link CheckBox} used to toggle VSync (vertical synchronization).
+     */
     private CheckBox vsyncCheckbox;
+
+    /**
+     * A {@link CheckBox} used to toggle fullscreen mode.
+     */
     private CheckBox fullscreenCheckbox;
 
+    /**
+     * Constructor for the class.
+     *
+     * @param game the main game instance
+     */
     public SettingsScreen(ChessGame game) {
         this.game = game;
         this.stage = new Stage(new ScreenViewport());
@@ -42,6 +82,11 @@ public class SettingsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Creates the user interface for the settings screen.
+     * This includes fields for configuring chess piece stats, options for graphics settings,
+     * and buttons for applying changes or returning to the main menu.
+     */
     private void createUI(){
         Table mainTable = new Table();
         mainTable.setFillParent(false);
@@ -163,6 +208,10 @@ public class SettingsScreen implements Screen {
         stage.addActor(scrollPane);
     }
 
+    /**
+     * Retrieves an array of resolution labels from the {@link #resolutions} array.
+     * @return an array of resolution labels
+     */
     private String[] getResolutionLabels() {
         String[] labels = new String[resolutions.length];
         for (int i = 0; i < resolutions.length; i++) {
@@ -171,6 +220,10 @@ public class SettingsScreen implements Screen {
         return labels;
     }
 
+    /**
+     * Sets the currently selected resolution in the {@link #resolutionSelect} dropdown
+     * based on the current window size stored in the {@link ConfigurationManager}.
+     */
     private void setCurrentResolution() {
         int currentWidth = configurationManager.getWindowWidth();
         int currentHeight = configurationManager.getWindowHeight();
@@ -184,6 +237,10 @@ public class SettingsScreen implements Screen {
         }
     }
 
+    /**
+     * Applies the selected graphics settings, including resolution, fullscreen mode, and VSync.
+     * Updates the application's display settings and adjusts the stage's viewport accordingly.
+     */
     private void applyGraphicsSettings() {
         configurationManager.saveConfiguration();
 
@@ -200,13 +257,22 @@ public class SettingsScreen implements Screen {
         stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
     }
 
+    /**
+     * Called when this screen becomes the current screen for the game.
+     * Sets the input processor to the stage to handle user interactions.
+     */
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Renders the settings screen, including clearing the screen and drawing the UI elements.
+     *
+     * @param delta the time between the last frame
+     */
     @Override
-    public void render(float v) {
+    public void render(float delta) {
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -214,6 +280,11 @@ public class SettingsScreen implements Screen {
         stage.draw();
     }
 
+    /**
+     * Called when the application window is resized.
+     * @param width the new width
+     * @param height the new height
+     */
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
@@ -231,6 +302,9 @@ public class SettingsScreen implements Screen {
     public void hide() {
     }
 
+    /**
+     * Releases all resources used by this screen, such as textures, fonts, and stages.
+     */
     @Override
     public void dispose() {
         stage.dispose();
