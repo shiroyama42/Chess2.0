@@ -1,11 +1,11 @@
-# Chess2.0
+# Chess 2.0
 
 A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
 This project was generated with a template including simple application launchers and a main class extending `Game` that sets the first screen.
 
 ## About the Game
-Chess2.0 is a modern take on the classic game of chess, providing an enhanced user experience with improved graphics and additional features. The game is built using Java and the libGDX framework, ensuring cross-platform compatibility and high performance.
+Chess 2.0 is a modern take on the classic game of chess, providing an enhanced user experience with improved graphics and additional features such as instead of taking down the opponent's pieces they are put into an arena where they shoot each others with guns. The game is built using Java and the libGDX framework.
 
 ## Platforms
 
@@ -37,6 +37,7 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 
 ## How to Play
 - Launch the game using the `lwjgl3:run` Gradle task.
-- Navigate the main menu to start a new game, load a saved game, or adjust settings.
-- Standard chess rules apply, with the objective to checkmate your opponent's king.
+- Navigate the main menu to start a new game or adjust settings.
+- Mostly standard chess rules apply, with the objective to defeat your opponent's king.
+- After trying to take down a piece they get into an arena where the black and white pieces can be moved with WASD (white piece) and arrow keys (black piece) on the keyboard.
 
