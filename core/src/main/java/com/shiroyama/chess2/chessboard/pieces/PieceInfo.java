@@ -3,8 +3,11 @@ package com.shiroyama.chess2.chessboard.pieces;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.shiroyama.chess2.arena.Projectile;
+import com.shiroyama.chess2.chessboard.model.ChessBoard;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.utils.ConfigurationManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -13,11 +16,35 @@ import java.util.List;
  */
 public class PieceInfo {
 
+    /**
+     * The {@link Team} of the piece.
+     */
     private Team team;
+
+    /**
+     * The {@link PieceType} of the piece.
+     */
     private PieceType pieceType;
+
+    /**
+     * The HP value of the piece.
+     */
     private int hp;
+
+    /**
+     * The attack rate value of the piece.
+     */
     private float attackRate;
+
+    /**
+     * The position of the piece.
+     */
     private TargetPoint position;
+
+    /**
+     * {@link Logger} for logging whenever the piece shot.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(PieceInfo.class);
 
     /**
      * Constructor for the class.
@@ -101,6 +128,8 @@ public class PieceInfo {
             new TargetPoint(targetPosition.getX() + 0.5f,targetPosition.getY() + 0.5f);
         Projectile projectile = new Projectile(this.team, position, centeredTargetPosition);
         projectiles.add(projectile);
+
+        logger.info("{} projectile shot.", this.team);
     }
 
     /**

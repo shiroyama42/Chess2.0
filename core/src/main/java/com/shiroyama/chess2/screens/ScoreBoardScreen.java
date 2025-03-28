@@ -9,9 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.shiroyama.chess2.ChessGame;
+import com.shiroyama.chess2.chessboard.controller.GameState;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
 import com.shiroyama.chess2.utils.ScoreBoardManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents the scoreboard screen of the chess game.
@@ -39,6 +42,11 @@ public class ScoreBoardScreen implements Screen {
      * The {@link ScoreBoardManager} instance used to retrieve game statistics, such as move counts and captured pieces.
      */
     private ScoreBoardManager scoreBoardManager;
+
+    /**
+     * {@link Logger} for logging button clicked.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(ScoreBoardScreen.class);
 
     /**
      * Constructor for the class.
@@ -100,6 +108,7 @@ public class ScoreBoardScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 game.setScreen(new MenuScreen(game));
+                logger.info("Menu button clicked.");
                 dispose();
                 scoreBoardManager.reset();
             }

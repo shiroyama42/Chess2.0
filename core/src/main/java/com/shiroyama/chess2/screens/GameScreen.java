@@ -20,6 +20,8 @@ import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
 import com.shiroyama.chess2.screens.dialog.PromotionDialog;
 import com.shiroyama.chess2.utils.TextureLoader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
@@ -93,6 +95,11 @@ public class GameScreen implements Screen {
     private PieceInfo attackerPiece;
 
     /**
+     * {@link Logger} for logging screen switch.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(GameScreen.class);
+
+    /**
      * Constructor for the class.
      */
     public GameScreen(){
@@ -161,6 +168,8 @@ public class GameScreen implements Screen {
 
             isInArena = true;
             arenaScreen = new ArenaScreen(attacker, defender, game);
+
+            logger.info("Arena combat starting.");
         });
 
 
@@ -227,6 +236,8 @@ public class GameScreen implements Screen {
      */
     public void exitArena(PieceInfo winner, PieceInfo loser){
         isInArena = false;
+
+        logger.info("Arena combat ended.");
         if (winner == null){
             board.pieces[(int)originalAttackerPosition.getX()][(int)originalAttackerPosition.getY()] = null;
 
@@ -250,11 +261,13 @@ public class GameScreen implements Screen {
                 promotionDialog.show(stage);
 
                 board.setPromoting(true);
+                logger.info("Promoting {}.", winner.getName());
 
                 stage.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent changeEvent, Actor actor) {
                         if (actor instanceof ImageButton && showingDialog){
+                            logger.info("Showing promotion dialog menu.");
                             PieceType newType = determinePieceTypeFromButton(actor);
                             if (newType != null){
                                 promotingPiece.setPieceType(newType);

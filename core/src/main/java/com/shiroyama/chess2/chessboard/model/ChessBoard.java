@@ -11,6 +11,8 @@ import com.shiroyama.chess2.chessboard.pieces.Team;
 import com.shiroyama.chess2.chessboard.utils.AttackListener;
 import com.shiroyama.chess2.chessboard.utils.PromotionListener;
 import com.shiroyama.chess2.utils.ScoreBoardManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
@@ -64,6 +66,11 @@ public class ChessBoard {
      * Flag indicating if the pawn promotion is in progress.
      */
     private boolean isPromoting = false;
+
+    /**
+     * {@link Logger} for logging piece movement, promotion and attack.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(ChessBoard.class);
 
     /**
      * Constructor for the class.
@@ -179,6 +186,7 @@ public class ChessBoard {
     /**
      * Moves a piece from one location to the other.
      * Handles captures, promotions and updates the score.
+     * Logs movement, attack and promoting.
      *
      * @param from the starting location of the piece
      * @param to the destination location for the piece
@@ -187,7 +195,7 @@ public class ChessBoard {
 
         PieceInfo piece = pieces[(int)from.getX()][(int)from.getY()];
         if (piece == null) {
-            System.out.println("Error: No piece at " + from.getX() + ", " + from.getY());
+            logger.error("Error: No piece at {}, {}.", from.getX(), from.getY());
             return;
         }
         PieceInfo target = pieces[(int)to.getX()][(int)to.getY()];
@@ -199,22 +207,30 @@ public class ChessBoard {
             piece.setPosition(from);
             target.setPosition(to);
 
-            System.out.println("moved to: " + to.getX() + "-" + to.getY());
+            logger.info("{} moved from {{}-{}} to {{}-{}}.", piece.getName(),
+                from.getX(), from.getY(),
+                to.getX(), to.getY());
 
             attackListener.onAttack(piece, target);
+            logger.info("{} attacked {}.", piece.getName(), target.getName());
 
         }else{
             pieces[(int)to.getX()][(int)to.getY()] = piece;
             pieces[(int)to.getX()][(int)to.getY()].setPosition(to);
             pieces[(int)from.getX()][(int)from.getY()] = null;
-            System.out.println("moved to: " + to.getX() + "-" + to.getY());
+
+            logger.info("{} moved from {{}-{}} to {{}-{}}.", piece.getName(),
+                from.getX(), from.getY(),
+                to.getX(), to.getY());
 
             if (piece.getPieceType() == PieceType.PAWN && piece.getTeam() == Team.WHITE && piece.getPosition().getY() == 0){
                 promotionListener.onPromote(piece);
+                logger.info("{} is promoting.", piece.getName());
             }
 
             if (piece.getPieceType() == PieceType.PAWN && piece.getTeam() == Team.BLACK && piece.getPosition().getY() == 7){
                 promotionListener.onPromote(piece);
+                logger.info("{} is promoting.", piece.getName());
             }
         }
     }

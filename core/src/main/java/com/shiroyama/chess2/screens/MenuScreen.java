@@ -13,6 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.shiroyama.chess2.ChessGame;
+import com.shiroyama.chess2.chessboard.model.ChessBoard;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents the main menu screen of the chess game.
@@ -40,6 +43,11 @@ public class MenuScreen implements Screen {
      *  A {@link Skin} used for styling UI elements such as buttons and tables.
      */
     private Skin skin;
+
+    /**
+     * {@link Logger} for logging button clicks.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(MenuScreen.class);
 
     /**
      * Constructor for the class.
@@ -74,6 +82,7 @@ public class MenuScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                logger.info("Play button clicked.");
                 chessGame.setScreen(new GameScreen());
             }
         });
@@ -81,6 +90,7 @@ public class MenuScreen implements Screen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                logger.info("Exit button clicked.");
                 Gdx.app.exit();
             }
         });
@@ -88,6 +98,7 @@ public class MenuScreen implements Screen {
         settingsButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                logger.info("Settings button clicked.");
                 chessGame.setScreen(new SettingsScreen(chessGame));
                 dispose();
             }

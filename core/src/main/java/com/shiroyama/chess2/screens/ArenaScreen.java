@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.shiroyama.chess2.ChessGame;
 import com.shiroyama.chess2.arena.Arena;
+import com.shiroyama.chess2.chessboard.model.ChessBoard;
 import com.shiroyama.chess2.utils.PieceMovementHandler;
 import com.shiroyama.chess2.arena.Projectile;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
@@ -25,6 +26,8 @@ import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.chessboard.pieces.Team;
 import com.shiroyama.chess2.utils.ScoreBoardManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -138,6 +141,11 @@ public class ArenaScreen implements Screen {
     private float pieceScaleFactor, healthBarScaleFactor;
 
     /**
+     * {@link Logger} for logging screen switch and arena combat results.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(ArenaScreen.class);
+
+    /**
      * Constructor for the class.
      *
      * @param attacker the attacking piece
@@ -168,9 +176,6 @@ public class ArenaScreen implements Screen {
         this.shapeRenderer = new ShapeRenderer();
 
         this.scoreBoardManager = ScoreBoardManager.getInstance();
-
-        float screenWidthInUnits = Gdx.graphics.getWidth() / 50f;
-        float screenHeightInUnits = Gdx.graphics.getHeight() / 50f;
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -211,6 +216,8 @@ public class ArenaScreen implements Screen {
                 String winningTeam = winner.getTeam() == Team.WHITE ? "WHITE" : "BLACK";
                 String losingTeam = loser.getTeam() == Team.WHITE ? "WHITE" : "BLACK";
 
+                logger.info("{} defeated, {} team won.", loser.getName(), winningTeam.toLowerCase());
+
                 gameOverMessage = losingTeam + " KING DIED\n" + winningTeam + " TEAM WON!";
 
                 menuButton = new TextButton("Return to Menu", skin);
@@ -223,6 +230,7 @@ public class ArenaScreen implements Screen {
                     @Override
                     public void changed(ChangeEvent changeEvent, Actor actor) {
                         game.create();
+                        logger.info("Menu button clicked, returning to menu screen.");
                     }
                 });
 
@@ -236,6 +244,7 @@ public class ArenaScreen implements Screen {
                     @Override
                     public void changed(ChangeEvent changeEvent, Actor actor) {
                         game.setScreen(new ScoreBoardScreen(game));
+                        logger.info("Scoreboard button clicked, changing the screen to scoreboard screen.");
                     }
                 });
 
@@ -267,6 +276,7 @@ public class ArenaScreen implements Screen {
                 if (!scoreAdded){
                     scoreBoardManager.recordCapture(loser, winner.getTeam());
                     scoreAdded = true;
+                    logger.info("{} won the arena combat.", winner.getName());
                 }
 
                 stage.addActor(menuButton);
@@ -296,6 +306,9 @@ public class ArenaScreen implements Screen {
             if (countdownTimer <= 0){
                 combatStarted = true;
                 arena.startCombat();
+
+                logger.info("Arena combat started.");
+
                 gameOverMessage = null;
             }else{
                 gameOverMessage = String.format("%.1f", countdownTimer);
@@ -356,7 +369,7 @@ public class ArenaScreen implements Screen {
     }
 
     /**
-     * Draws the chess piece and the associated gun at the specified location.
+     * Draws the chess piece, the associated gun and health bar at the specified location.
      *
      * @param texture the texture of the chess piece
      * @param position the position of the chess piece

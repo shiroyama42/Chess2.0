@@ -9,8 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.shiroyama.chess2.ChessGame;
+import com.shiroyama.chess2.chessboard.controller.GameState;
 import com.shiroyama.chess2.chessboard.pieces.PieceType;
 import com.shiroyama.chess2.utils.ConfigurationManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents the settings screen of the chess game.
@@ -68,6 +71,11 @@ public class SettingsScreen implements Screen {
     private CheckBox fullscreenCheckbox;
 
     /**
+     * {@link Logger} for logging button clicks, setting changes.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(SettingsScreen.class);
+
+    /**
      * Constructor for the class.
      *
      * @param game the main game instance
@@ -113,6 +121,9 @@ public class SettingsScreen implements Screen {
                 String.valueOf(configurationManager.getAttackRate(pieceType)), skin);
             mainTable.add(attackRateField).width(100).pad(5);
 
+            String hpString = String.valueOf(configurationManager.getHp(pieceType));
+            String attackRateString = String.valueOf(configurationManager.getAttackRate(pieceType));
+
             TextButton saveButton = new TextButton("Save", skin);
             saveButton.addListener(new ChangeListener() {
                 @Override
@@ -125,6 +136,12 @@ public class SettingsScreen implements Screen {
                         configurationManager.setHp(pieceType, hp);
                         configurationManager.setAttackRate(pieceType, attackRate);
                         configurationManager.saveConfiguration();
+
+                        logger.info("Stat save button clicked.");
+                        logger.info("HP value for {} changed from {} to {}.", pieceType, hpString,
+                            configurationManager.getHp(pieceType));
+                        logger.info("Attack rate value for {} changed from {} to {}.", pieceType, attackRateString,
+                            configurationManager.getAttackRate(pieceType));
 
                     } catch (NumberFormatException e) {
                         Dialog dialog = new Dialog("Error", skin);
@@ -152,6 +169,7 @@ public class SettingsScreen implements Screen {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 String[] res = resolutions[resolutionSelect.getSelectedIndex()];
                 configurationManager.setWindowSize(Integer.parseInt(res[1]), Integer.parseInt(res[2]));
+                logger.info("Resolution changed to {}.", res[0]);
             }
         });
         mainTable.add(resolutionSelect).left().colspan(3);
@@ -164,6 +182,11 @@ public class SettingsScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 configurationManager.setFullscreen(fullscreenCheckbox.isChecked());
+                if (fullscreenCheckbox.isChecked()){
+                    logger.info("Window size changed to fullscreen.");
+                }else{
+                    logger.info("Window size changed to windowed.");
+                }
             }
         });
         mainTable.add(fullscreenCheckbox).left();
@@ -175,6 +198,11 @@ public class SettingsScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 configurationManager.setVSync(vsyncCheckbox.isChecked());
+                if (vsyncCheckbox.isChecked()){
+                    logger.info("VSync turned on.");
+                }else{
+                    logger.info("VSync turned off.");
+                }
             }
         });
         mainTable.add(vsyncCheckbox).left();
@@ -185,6 +213,7 @@ public class SettingsScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 applyGraphicsSettings();
+                logger.info("Graphics save button clicked.");
             }
         });
         mainTable.add(applyButton).colspan(4).width(200).height(50);
@@ -196,6 +225,7 @@ public class SettingsScreen implements Screen {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 game.setScreen(new MenuScreen(game));
                 dispose();
+                logger.info("Menu button clicked.");
             }
         });
 

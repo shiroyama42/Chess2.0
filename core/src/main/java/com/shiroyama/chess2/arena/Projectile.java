@@ -3,6 +3,8 @@ package com.shiroyama.chess2.arena;
 import com.shiroyama.chess2.chessboard.model.TargetPoint;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.Team;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -30,6 +32,11 @@ public class Projectile {
      * The size of the projectile for collision detection.
      */
     private static final float PROJECTILE_SIZE = 10;
+
+    /**
+     * {@link Logger} for logging projectile hits.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(Projectile.class);
 
     /**
      * Constructor for the Projectile class.
@@ -82,6 +89,15 @@ public class Projectile {
         float projectileY = position.getY() * 50;
 
         float pieceSize = 50f;
+
+        if (piece.getTeam() != shooterTeam
+            && projectileX < pieceX + pieceSize
+            && projectileX + PROJECTILE_SIZE > pieceX
+            && projectileY < pieceY + pieceSize
+            && projectileY + PROJECTILE_SIZE > pieceY){
+            logger.info("{} hit, losing 1 HP", piece.getName());
+            logger.info("Current HP: {}", piece.getHp() - 1);
+        }
 
         return piece.getTeam() != shooterTeam
             && projectileX < pieceX + pieceSize

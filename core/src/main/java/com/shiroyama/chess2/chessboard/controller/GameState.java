@@ -11,6 +11,8 @@ import com.shiroyama.chess2.chessboard.model.ChessBoard;
 import com.shiroyama.chess2.chessboard.pieces.PieceInfo;
 import com.shiroyama.chess2.chessboard.pieces.Rules;
 import com.shiroyama.chess2.chessboard.pieces.Team;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
@@ -59,6 +61,11 @@ public class GameState implements InputProcessor {
      * x- and y-coordinate of the board's center.
      */
     private float centerX, centerY;
+
+    /**
+     * {@link Logger} for logging clicked square.
+     */
+    private static final Logger logger = LoggerFactory.getLogger(GameState.class);
 
     /**
      * Constructor for the class
@@ -149,6 +156,7 @@ public class GameState implements InputProcessor {
         int adjustedY = y - (int)centerY;
 
         TargetPoint tileIdx = board.getPoint(adjustedX, adjustedY);
+        logger.info("{} - {} clicked.", tileIdx.getX(), tileIdx.getY());
 
         boolean moved = false;
 

@@ -78,6 +78,8 @@ subprojects {
     testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
 
+    implementation 'ch.qos.logback:logback-classic:1.5.15'
+
 
   }
 
