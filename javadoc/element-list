@@ -1,0 +1,10 @@
+com.shiroyama.chess2
+com.shiroyama.chess2.arena
+com.shiroyama.chess2.chessboard.controller
+com.shiroyama.chess2.chessboard.model
+com.shiroyama.chess2.chessboard.pieces
+com.shiroyama.chess2.chessboard.utils
+com.shiroyama.chess2.lwjgl3
+com.shiroyama.chess2.screens
+com.shiroyama.chess2.screens.dialog
+com.shiroyama.chess2.utils
