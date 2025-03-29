@@ -36,7 +36,7 @@ Note that most tasks that are not specific to a single project can be run with `
 For example, `core:clean` removes `build` folder only from the `core` project.
 
 ## How to Play
-- Launch the game using the `lwjgl3:run` Gradle task or navigate to the out/artifacts/Chess2_0_jar folder and type 'java -jar Chess2.0.jar' into bash terminal.
+- Launch the game using the `lwjgl3:run` Gradle task or run .jar file.
 - Navigate the main menu to start a new game or adjust settings.
 - Mostly standard chess rules apply, with the objective to defeat your opponent's king.
 - After trying to take down a piece they get into an arena where the black and white pieces can be moved with WASD (white piece) and arrow keys (black piece) on the keyboard.
